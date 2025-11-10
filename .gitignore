@@ -208,3 +208,5 @@ __marimo__/
 
 # Resultados (archivos pesados)
 resultados/
+# Archivo CSV de datos originales
+Total_Mes_Act_Datos completos.csv

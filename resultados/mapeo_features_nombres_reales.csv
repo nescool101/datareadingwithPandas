@@ -1,0 +1,30 @@
+Feature_X,Nombre_Real
+Feature_0,Total Marcaciones
+Feature_1,MESES_ANTIGUEDAD
+Feature_2,MESES_ANTIGUEDAD_INSTALACION
+Feature_3,Msh Cuenta
+Feature_4,Msh Fecha (copia)
+Feature_5,Msh Hora
+Feature_6,Msh Hora (copia)
+Feature_7,MSH_CEDULA
+Feature_8,MSH_LOGIN_ID
+Feature_9,MSH_TIPO_CLIENTE
+Feature_10,RENTA_MES_ACTUAL
+Feature_11,RENTA_MES_ANTERIOR
+Feature_12,SIN TARIFA
+Feature_13,VECES_CONSULTADA
+Feature_14,Vlr Diferencia Act Ant
+Feature_15,Msh Divisional
+Feature_16,Msh Canal
+Feature_17,MOVIMIENTO_RENTA
+Feature_18,Msh Proceso
+Feature_19,Msh Ser Activos
+Feature_20,MSH_AREA
+Feature_21,MSH_DIVISION
+Feature_22,MSH_ESTADO
+Feature_23,MSH_GRUPO
+Feature_24,MSH_OPERACION
+Feature_25,MSH_PROCESO_SRV
+Feature_26,MSH_RAZON
+Feature_27,MSH_TIPO_SERVICIO
+Feature_28,PROCESOS 2

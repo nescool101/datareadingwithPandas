@@ -1,0 +1,13 @@
+RESULTADOS VALIDACIÓN CRUZADA - REGRESIÓN LOGÍSTICA
+================================================================================
+
+Accuracy promedio: 0.9314
+Desviación estándar: 0.0004
+Intervalo de confianza (95%): 0.9314 (+/- 0.0008)
+
+Scores por fold:
+  Fold 1: 0.9307
+  Fold 2: 0.9315
+  Fold 3: 0.9317
+  Fold 4: 0.9319
+  Fold 5: 0.9312

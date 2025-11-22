@@ -1,0 +1,23 @@
+{
+  "variables_clave": [
+    "Feature_14",
+    "Feature_12",
+    "Feature_17",
+    "Feature_1",
+    "Feature_9",
+    "Feature_2",
+    "Feature_3",
+    "Feature_4",
+    "Feature_11",
+    "Feature_19",
+    "Feature_10",
+    "Feature_8",
+    "Feature_21",
+    "Feature_26",
+    "Feature_25"
+  ],
+  "importancia_total": 0.9978559613227844,
+  "porcentaje_explicado": 99.78559875488281,
+  "total_variables": 29,
+  "variables_seleccionadas": 15
+}

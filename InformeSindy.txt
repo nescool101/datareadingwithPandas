@@ -1,0 +1,491 @@
+
+
+Universidad Internacional de La Rioja
+Escuela Superior de Ingeniería y Tecnología
+
+
+
+
+Máster Universitario en Análisis y Visualización de Datos Masivos/ Visual Analytics and Big Data
+  Modelos de clasificación para identificar factores clave de rentabilidad en tarifas NBO del segmento Fijo de Claro Colombia[El título actual del trabajo, aunque describe de forma general el enfoque del estudio, resulta extenso y algo genérico. 
+
+Expresiones como “comparación de modelos de clasificación para identificar factores determinantes” pueden simplificarse para lograr mayor claridad y precisión. Además, sería conveniente incorporar explícitamente el contexto de aplicación (Claro Colombia) y aclarar que se trata de un análisis de rentabilidad sobre tarifas NBO en el segmento fijo. 
+
+Se sugiere reformular el título para hacerlo más técnico, directo y representativo del enfoque del estudio, por ejemplo: "Modelos de clasificación para identificar factores clave de rentabilidad en tarifas NBO del segmento Fijo de Claro Colombia". Esta versión mejora la concreción sin perder el foco del trabajo. ][Ok]
+
+
+
+	
+
+Trabajo fin de estudio presentado por:	Sindy Katerine Rincón Torres
+Tipo de trabajo:	Comparativa de soluciones
+Director/a:	Rafael Neftalí Lizcano Reyes
+Fecha:	23/10/2025
+
+Resumen 
+El presente Trabajo Fin de Máster tiene como objetivo analizar y predecir la aceptación y rentabilidad de las tarifas Next Best Offer (NBO) en clientes del segmento Fijo de Claro Colombia, con el fin de apoyar los procesos de fidelización y personalización de ofertas mediante técnicas de machine learning. La investigación busca identificar tanto el modelo predictivo más adecuado como las variables que ejercen mayor influencia en la toma de decisiones asociada a la rentabilización de dichas tarifas.
+Para alcanzar este objetivo, se llevó a cabo un proceso metodológico que incluyó la recopilación, depuración y preparación del conjunto de datos, seguido de un análisis exploratorio de datos (EDA) orientado a la caracterización de las variables, identificación de patrones y formulación de hipótesis preliminares. Posteriormente, se desarrollaron y entrenaron distintos modelos de clasificación supervisada, entre ellos regresión logística, Random Forest y XGBoost, los cuales fueron evaluados mediante métricas de desempeño como la matriz de confusión y el área bajo la curva ROC (ROC-AUC).
+Los resultados obtenidos evidenciaron que el modelo XGBoost presenta el mejor rendimiento global en términos de capacidad predictiva y robustez. Asimismo, el análisis de importancia de variables reveló que MSH_TIPO_CLIENTE es el principal factor explicativo del modelo, concentrando el 93,47% de la importancia total, lo que indica que la tipología del cliente es el determinante más relevante en la rentabilización de una tarifa NBO.
+En conclusión, el estudio demuestra la utilidad de los modelos de machine learning como herramientas de apoyo a la toma de decisiones comerciales, aportando insights estratégicos que pueden contribuir a optimizar las estrategias de fidelización y personalización de ofertas en el sector de telecomunicaciones.
+Palabras clave: Next Best Offer, Machine Learning, Árboles de Decisión, Telecomunicaciones, Fidelización de Clientes
+
+
+
+
+Abstract
+This Master’s Thesis aims to analyze and predict the acceptance and profitability of Next Best Offer (NBO) tariffs among customers in the Fixed segment of Claro Colombia, with the purpose of supporting customer retention and offer personalization processes through the application of machine learning techniques. The research seeks to identify both the most appropriate predictive model and the variables that exert the greatest influence on decision-making related to the profitability of these tariffs.
+To achieve this objective, a methodological process was conducted that included the collection, cleaning, and preparation of the dataset, followed by an exploratory data analysis (EDA) focused on variable characterization, pattern identification, and the formulation of preliminary hypotheses. Subsequently, several supervised classification models were developed and trained, including logistic regression, Random Forest, and XGBoost, which were evaluated using performance metrics such as the confusion matrix and the area under the ROC curve (ROC-AUC).
+The results obtained demonstrate that the XGBoost model exhibits the best overall performance in terms of predictive capability and robustness. Furthermore, the feature importance analysis revealed that MSH_TIPO_CLIENTE is the primary explanatory variable in the model, accounting for 93.47% of the total importance, indicating that customer typology is the most relevant determinant in the profitability of an NBO tariff.
+In conclusion, this study demonstrates the usefulness of machine learning models as decision-support tools for commercial strategy, providing strategic insights that can contribute to the optimization of customer retention and offer personalization strategies within the telecommunications sector.
+
+Keywords: Next Best Offer, Machine Learning, Decision Trees, Telecommunications, Customer Retention
+
+
+
+
+Índice de contenidos
+1.	Introducción 	1
+1.1.	Motivación	3
+1.2.	Planteamiento del trabajo	4
+1.3.	Estructura del trabajo	4
+2.	Contexto y estado del arte	6
+2.1.	Contexto del problema	6
+2.2.	Estado del arte	7
+2.3.	Conclusiones	10
+3.	Objetivos concretos y metodología de trabajo	12
+3.1.	Objetivo general	12
+3.2.	Objetivos específicos	12
+3.3.	Metodología del trabajo	13
+4.	Marco normativo	16
+5.	Desarrollo específico de la contribución	18
+6.	Código fuente y datos analizados	19
+6.1.	Código fuente	19
+6.2.	Datos Analizados	19
+7.	Conclusiones	29
+8.	Limitaciones y prospectiva	31
+8.1.	Limitaciones	31
+8.2.	Trabajo futuro	31
+Referencias bibliográficas	33
+Anexo A.	Privacidad y protección de datos	36
+
+Índice de figuras 
+Figura 1. Participación del mercado banda ancha fija	2
+Figura 2. Rentabilidad NBO	8
+Figura 3. Estructura de un árbol de decisión	9
+Figura 4. Resumen Estadístico del Dataset	21
+Figura 5. Distribución de Rentabilizo	22
+Figura 6. Distribución de Tarifa NBO	22
+Figura 7. Histograma de meses de antigüedad	23
+Figura 8 Histograma de meses de instalación	23
+Figura 9 Histograma de Fecha	24
+Figura 10 Histograma de Hora	24
+Figura 11. Comparación de Métricas Básicas	26
+Figura 12. Arboles de Decisión	28
+Figura 13. Top Variables Más Importantes	30
+Figura 14 Distribución  Variables Más Importantes	30
+Figura 15. Matriz de confusión	31
+Figura 16 Distribución de cuentas con tarifa NBO por rango de meses	34
+Figura 17 Distribucion de cuentas con tarifa NBO por Tipo Cliente	35
+
+Índice de tablas
+Tabla 1. Matriz de Confusión	25
+Tabla 2. Valores de Variable	27
+
+1.Introducción [La introducción presenta adecuadamente el enfoque general del trabajo, pero requiere una revisión en tres aspectos clave: 
+
+primero, es necesario incorporar referencias bibliográficas que respalden la relevancia del problema planteado, especialmente en el apartado de motivación, para anclar el estudio en la literatura existente. 
+
+Segundo, algunos fragmentos presentan repeticiones o detalles metodológicos que deberían trasladarse al capítulo correspondiente, lo que contribuiría a una mejor organización del contenido. 
+
+Por último, conviene revisar el lenguaje utilizado para garantizar un tono más formal y académico, y resumir de forma más precisa la estructura del trabajo, mencionando todos los capítulos relevantes.][OK]
+Claro Colombia, empresa perteneciente al grupo holding América Móvil, ofrece una amplia gama de servicios en los sectores de telecomunicaciones, entretenimiento, servicios en la nube, streaming y comercio electrónico(Plata, 2019). Su portafolio se estructura principalmente en los segmentos móvil, empresarial y fijo. 
+En Colombia, Claro se consolida como el principal operador del mercado de telecomunicaciones móviles, con una participación del 45,17 %, lo que lo posiciona como líder indiscutible del sector. La compañía cuenta con una amplia infraestructura conformada por más de mil antenas distribuidas a lo largo del territorio nacional, garantizando una cobertura extensa y una alta calidad en sus servicios. Además, Claro ha desempeñado un papel pionero en la implementación y expansión de la tecnología 5G en el país, marcando un hito en la evolución de las comunicaciones móviles en Colombia. Su liderazgo tecnológico y su capacidad de innovación han contribuido significativamente al desarrollo del ecosistema digital nacional, impulsando la conectividad, la competitividad y la transformación digital tanto en zonas urbanas como rurales.(La República, 2024) 
+En cuanto al servicio de telefonía fija y banda ancha, Claro mantiene una posición de liderazgo en el mercado colombiano, con una participación del 33 %, consolidándose como el operador dominante en este segmento. Su presencia en el mercado de banda ancha fija refleja una estrategia de expansión sostenida, orientada a mejorar la cobertura y la calidad del servicio en diferentes regiones del país. Asimismo, la compañía se posiciona como el principal proveedor de televisión por suscripción, alcanzando un total de 3 millones 92 mil clientes para el año 2024, cifra que evidencia su fortaleza comercial, su capacidad tecnológica y su compromiso con la oferta de servicios convergentes que integran conectividad, entretenimiento y soluciones digitales para los hogares colombianos.
+
+Figura 1. Participación del mercado banda ancha fija 
+
+
+ Para el desarrollo de este trabajo se hará especial énfasis en el segmento de servicios fijos, realizando un análisis detallado de la rentabilidad asociada a las tarifas NBO (Next Best Offer o Siguiente Mejor Oferta).
+El modelo de tarifas NBO surge como una respuesta al constante cambio en el comportamiento de la industria de las telecomunicaciones, ya que permite predecir tendencias en las preferencias de los clientes, mejorar su experiencia y optimizar tanto la rentabilidad como la fidelización.(Anna Valtonen, 2020)
+La estrategia NBO busca ofrecer al cliente la tarifa más adecuada según su perfil y comportamiento, buscando un doble objetivo: incrementar su satisfacción y maximizar la rentabilidad para la compañía. A pesar de su implementación, aún existe una limitación de conocimiento claro sobre cuáles variables influyen directamente en la adquisición del servicio bajo una tarifa NBO. Esta falta de comprensión restringe la capacidad para optimizar las estrategias comerciales y de personalización de ofertas.
+Por esta razón, el objetivo principal de este trabajo es identificar las variables que más inciden en la rentabilidad al aplicar una tarifa NBO, a través de un análisis comparativo de distintos modelos de clasificación. Para ello, se evaluará y contrastará el desempeño de algoritmos de machine learning como árboles de decisión, Random Forest y regresión logística, con el propósito de determinar qué variables tienen mayor peso en la predicción de la rentabilidad y cómo pueden aprovecharse para la perfilación de clientes potenciales o la optimización de estrategias de fidelización.
+1.1.Motivación
+En un entorno empresarial cada vez más competitivo y caracterizado por la creciente disponibilidad de datos, las organizaciones buscan de manera constante mecanismos que les permitan comprender con mayor precisión el comportamiento de sus clientes y anticipar sus decisiones de consumo. En este contexto, el concepto de Next Best Offer (NBO) se ha consolidado como una de las estrategias más relevantes dentro del ámbito del marketing analítico y la inteligencia artificial. El NBO se basa en modelos predictivos que, mediante técnicas avanzadas de aprendizaje automático, permiten identificar patrones de comportamiento, analizar la frecuencia de consumo y comprender los hábitos de los clientes, con el objetivo de ofrecerles la propuesta comercial más adecuada en el momento oportuno.
+En el caso de la industria de las telecomunicaciones, y particularmente en la compañía Claro, la aplicación del enfoque NBO adquiere una relevancia estratégica, ya que los paquetes de servicios generados a partir de estos modelos se encuentran directamente asociados a tarifas específicas diseñadas para maximizar la adecuación entre la oferta comercial y las necesidades reales del cliente. Una correcta asignación de estas tarifas no solo incide en la rentabilidad de la compañía, sino que también influye de manera significativa en la percepción de valor y en la fidelización del usuario.
+El presente estudio tiene como propósito principal identificar las variables que ejercen una mayor influencia en la probabilidad de que un cliente adquiera una de las tarifas definidas por el modelo NBO, permitiendo así reconocer perfiles con mayor propensión a la aceptación de dichas ofertas. La identificación de estos factores clave resulta fundamental para optimizar las estrategias comerciales y contribuir al incremento sostenido de la rentabilidad organizacional.
+Para abordar esta problemática, se hace imprescindible una comprensión profunda de la lógica del negocio, así como la garantía de la calidad, consistencia y trazabilidad de la información disponible. Asimismo, la selección adecuada de metodologías analíticas y modelos predictivos se convierte en un elemento central para identificar, de manera rigurosa, los factores que influyen en la asignación óptima de tarifas. El cumplimiento sistemático de estos elementos posibilita la construcción de un modelo analítico robusto, capaz de respaldar la toma de decisiones estratégicas basadas en evidencia empírica.
+La relevancia de este trabajo radica en su impacto directo tanto en la eficiencia operativa como en la satisfacción del cliente. Una segmentación adecuada y una correcta identificación de los usuarios idóneos para cada tarifa permiten no solo maximizar los ingresos de la compañía, sino también mejorar la experiencia del consumidor mediante la oferta de productos y servicios alineados con sus necesidades, preferencias y comportamientos reales.
+Finalmente, este estudio aporta valor al ámbito académico y científico al demostrar la aplicabilidad de las técnicas de análisis de datos y machine learning en contextos empresariales reales, contribuyendo a cerrar la brecha entre la teoría y la práctica. De este modo, se refuerza la integración de enfoques analíticos avanzados en los procesos de gestión comercial y personalización de ofertas, consolidando el papel del análisis predictivo como una herramienta clave en la toma de decisiones estratégicas.
+1.2.Planteamiento del trabajo
+El análisis de clasificación de variables mediante árboles de decisión y otras técnicas de machine learning supervisado ha sido ampliamente utilizado en contextos económicos, empresariales y científicos, debido a su capacidad para modelar relaciones complejas, identificar patrones relevantes y determinar con claridad las variables que ejercen mayor influencia sobre una variable objetivo. Estas metodologías resultan especialmente valiosas en entornos caracterizados por grandes volúmenes de datos y múltiples factores explicativos, como es el caso del sector de las telecomunicaciones.
+En el contexto específico de las estrategias de Next Best Offer (NBO), las organizaciones enfrentan el desafío de identificar de manera precisa qué factores determinan la probabilidad de que un cliente acepte una determinada tarifa, así como de evaluar el impacto de dichas decisiones sobre la rentabilidad del negocio. Si bien los modelos NBO son ampliamente utilizados como herramientas operativas en los departamentos de marketing, en muchos casos su funcionamiento interno y los factores que guían sus decisiones no son plenamente analizados desde una perspectiva analítica y explicativa, lo que limita la transparencia y la capacidad de optimización de dichas estrategias.
+En este estudio, el problema central radica en la ausencia de un análisis sistemático y cuantitativo que permita identificar, comparar y comprender los factores clave que influyen en la asignación y rentabilización de tarifas NBO en el segmento Fijo de Claro Colombia. La organización no cuenta con un estudio previo exhaustivo que evalúe, de manera comparativa, distintos enfoques de clasificación ni que determine cuáles variables aportan mayor valor predictivo y explicativo al proceso de toma de decisiones comerciales.
+Ante esta necesidad, se propone desarrollar y comparar diversos modelos de clasificación supervisada, orientados a identificar los factores determinantes de rentabilidad asociados a la adopción de tarifas NBO. El análisis comparativo entre modelos —como regresión logística, Random Forest y XGBoost— permitirá no solo evaluar su desempeño predictivo, sino también analizar su grado de interpretabilidad y su viabilidad de aplicación en un entorno organizacional real, donde la explicabilidad de los resultados resulta un requisito clave.
+La principal contribución de este trabajo radica en la integración de técnicas avanzadas de aprendizaje automático con un enfoque explícito en la estrategia NBO, abordando una práctica ampliamente utilizada en el marketing personalizado desde una perspectiva analítica orientada a la optimización de la rentabilidad empresarial. Asimismo, el estudio busca contrastar las hipótesis generadas a partir del análisis exploratorio de datos con los resultados obtenidos mediante modelos predictivos, evidenciando posibles diferencias entre la intuición inicial y el comportamiento real capturado por los algoritmos.
+De este modo, el presente trabajo pretende articular los principios de la analítica de datos y la ingeniería de software con la toma de decisiones estratégicas en el ámbito comercial, aportando tanto al desarrollo académico —mediante la aplicación y comparación de modelos de clasificación— como a la mejora de los procesos internos de la organización, proporcionando una base sólida y basada en evidencia para la definición de estrategias de fidelización y personalización de ofertas.
+1.3.Estructura del trabajo
+El presente Trabajo Fin de Máster se encuentra estructurado en una serie de capítulos que permiten abordar de manera progresiva y coherente el problema de investigación planteado, facilitando la comprensión del enfoque metodológico adoptado, los análisis realizados y los resultados obtenidos.
+En primer lugar, se presenta un marco conceptual y metodológico en el que se describe el uso de los árboles de decisión y otras técnicas de aprendizaje supervisado en distintos ámbitos de aplicación, destacando su relevancia, ventajas y limitaciones en el análisis de datos. Este apartado tiene como finalidad contextualizar el enfoque analítico seleccionado y justificar su idoneidad para el problema objeto de estudio.
+Posteriormente, se expone una contextualización de la compañía objeto de análisis, así como una descripción detallada del conjunto de datos utilizado. En este capítulo se abordan aspectos relacionados con el origen de la información, la naturaleza de las variables y los procesos de preparación y depuración de los datos, elementos fundamentales para garantizar la calidad y fiabilidad de los resultados.
+A continuación, se desarrolla el Análisis Exploratorio de Datos (EDA), en el cual se identifican patrones, tendencias y comportamientos relevantes presentes en la información. Esta etapa se concibe como una fase inicial del proceso analítico, orientada a comprender las características intrínsecas del conjunto de datos y a generar hipótesis preliminares que guíen las fases posteriores del estudio, tal como señalan enfoques metodológicos previos en la literatura (Nugroho, 2024).
+En los capítulos siguientes, se aborda el problema principal mediante la aplicación de distintos métodos de análisis y modelado predictivo, describiendo de manera detallada su implementación, evolución y los resultados obtenidos. Se incluye una comparación entre los modelos desarrollados, evaluando su desempeño a través de métricas adecuadas y analizando su capacidad predictiva, interpretabilidad y aplicabilidad en el contexto del negocio.
+Finalmente, el trabajo concluye con la presentación de las conclusiones generales, en las que se sintetizan los hallazgos más relevantes y se evala el grado de cumplimiento de los objetivos planteados. Asimismo, se incluyen las limitaciones del estudio y se proponen posibles líneas de mejora y trabajos futuros, con el objetivo de ampliar y profundizar en las contribuciones realizadas.
+
+2.Contexto y estado del arte
+2.1.Contexto del problema[El apartado presenta una descripción detallada del funcionamiento del modelo NBO en el contexto de Claro Colombia, lo cual aporta claridad sobre el entorno operativo del proyecto. 
+
+Sin embargo, el contenido está basado principalmente en información interna o empírica, sin referencias a fuentes externas que respalden los datos mencionados o validen la importancia estratégica del problema. 
+
+Para fortalecer este bloque, es necesario incorporar referencias bibliográficas o institucionales (formato APA) que contextualicen el uso del modelo NBO en telecomunicaciones o en estrategias de fidelización de clientes. Esto permitirá vincular el análisis empresarial con una perspectiva académica y aumentar la solidez del apartado. ][Ok
+]
+Claro Colombia destina recursos significativos —tanto tecnológicos como operativos— a la implementación de la estrategia de Next Best Offer (NBO) en el segmento Fijo, con el objetivo de maximizar el Ingreso Promedio por Usuario (ARPU) y mitigar las tasas de abandono (churn) mediante acciones proactivas de fidelización y rentabilización de su base de clientes  (Claro, 2025b). En este contexto, el modelo NBO se consolida como un pilar fundamental dentro de la estrategia comercial de la compañía, al permitir la formulación de ofertas personalizadas orientadas a incrementar el valor del cliente a lo largo de su ciclo de vida.
+No obstante, a pesar de su relevancia estratégica, la eficacia operativa del modelo NBO se ve actualmente limitada por una carencia crítica de visibilidad analítica, particularmente en lo relativo a la comprensión profunda de los factores que determinan su rentabilidad efectiva. El problema central radica en la ausencia de un marco predictivo robusto, validado y explicable que permita identificar de manera concluyente y jerarquizar las variables operacionales, contractuales y de comportamiento que influyen de forma significativa en la rentabilización sostenida tras la aceptación de una tarifa NBO.
+Dentro del área de fidelización, la organización opera el modelo NBO —también denominado modelo de rentabilización fija— a través de campañas periódicas que incluyen múltiples canales de contacto, tales como llamadas telefónicas, correos electrónicos y gestiones a través de redes sociales. Estas acciones tienen como finalidad ofrecer nuevos servicios o mejoras comerciales a clientes existentes, buscando incrementar su nivel de compromiso y su aporte económico a la compañía.
+En el desarrollo de este proceso, se analizan métricas clave como el número de clientes únicos contactados y la cantidad de cuentas efectivamente rentabilizadas dentro del público objetivo. Dicho público está compuesto por clientes actuales con potencial de crecimiento, a quienes se les proponen servicios adicionales alineados con sus características y necesidades. Sin embargo, se observa que no todas las cuentas rentabilizadas derivan en la aplicación de una tarifa NBO, lo que introduce un elemento de complejidad adicional en el análisis.
+
+Esta situación responde, en parte, a dinámicas propias de los procesos de retención. Por ejemplo, cuando un cliente manifiesta su intención de cancelar el servicio, se activan distintos anillos de retención, uno de los cuales contempla la oferta de tarifas especiales con el objetivo de evitar la pérdida del cliente. En estos casos, aunque se registre una acción de rentabilización o retención, no necesariamente se produce un incremento en la renta, por lo que dichas operaciones no califican como tarifas NBO en sentido estricto  (Claro, 2025a)
+En consecuencia, el foco analítico de este estudio se centra exclusivamente en las cuentas que sí aplican tarifas NBO, con el propósito de profundizar en la comprensión de los factores que caracterizan a estos clientes. En particular, se busca identificar patrones comunes y variables determinantes entre aquellos clientes que aceptaron la oferta, con el fin de establecer qué atributos influyen con mayor peso en la decisión positiva dentro del flujo de rentabilización.
+El objetivo final es optimizar las estrategias de NBO mediante la identificación de los factores clave que incrementan la probabilidad de aceptación y rentabilidad, proporcionando así una base analítica sólida que permita mejorar la eficiencia de las campañas, orientar la segmentación de clientes y fortalecer la toma de decisiones estratégicas en el área de fidelización
+
+Figura 2. Rentabilidad NBO
+
+2.2.Estado del arte[Este apartado necesita una reestructuración completa. Actualmente se limita a mencionar algunos modelos de clasificación (árboles de decisión, Random Forest, regresión logística) sin desarrollar una revisión sistemática o argumentada de trabajos previos que hayan aplicado estas técnicas en contextos similares. 
+
+Tampoco se analizan autores relevantes ni se justifica la elección de estos algoritmos. Es imprescindible reformular este subapartado como una revisión bibliográfica que incluya estudios recientes sobre:
+Aplicaciones de modelos de clasificación en predicción de rentabilidad o comportamiento de clientes.
+Uso de NBO en analítica avanzada o marketing personalizado.
+Comparación de algoritmos supervisados en entornos empresariales.
+
+Cada uno de estos ejes debe estar respaldado con citas en formato APA, correctamente integradas en el texto, y no como notas al pie. 
+Esto permitirá que el lector entienda en qué medida el trabajo propuesto se alinea o se diferencia de investigaciones previas.][ok]
+Los árboles de decisión constituyen una de las técnicas de aprendizaje automático supervisado más empleadas en el ámbito de la analítica de datos, debido a su capacidad para modelar de manera eficiente la relación entre una variable objetivo y un conjunto de variables explicativas. Este tipo de modelos se fundamenta en una estructura jerárquica y secuencial, mediante la cual el espacio de los datos se divide progresivamente en subconjuntos más homogéneos, con el propósito de minimizar el error de clasificación o regresión, siguiendo criterios estadísticos de optimización comparables a enfoques como el de mínimos cuadrados (Arias, 2024).
+La lógica de funcionamiento de los árboles de decisión se basa en la selección iterativa de la variable predictora que aporta la mayor ganancia de información o reducción de impureza en cada etapa del proceso. De este modo, los datos son segmentados atendiendo al peso relativo y al poder discriminante de cada variable, dando lugar a una estructura compuesta por nodos internos, ramas y nodos terminales u hojas. Esta arquitectura facilita no solo la identificación de patrones complejos, sino también la representación explícita de relaciones no lineales e interacciones entre variables, aspectos que resultan difíciles de capturar mediante modelos lineales tradicionales (Barrientos Martínez, 2009).
+Una de las principales fortalezas de los árboles de decisión radica en su alto grado de interpretabilidad, ya que las reglas de decisión derivadas del modelo pueden ser visualizadas y comprendidas con facilidad, incluso por usuarios no expertos en técnicas avanzadas de machine learning. Esta característica convierte a los árboles de decisión en herramientas especialmente valiosas en contextos empresariales y organizacionales, donde la explicabilidad del modelo es un requisito clave para la adopción de soluciones analíticas y para la justificación de decisiones estratégicas ante distintos actores (Mullainathan & Spiess, 2017).
+En consecuencia, los árboles de decisión no solo destacan por su desempeño predictivo, sino también por su capacidad para traducir resultados analíticos complejos en conocimiento accionable, lo que los posiciona como un componente fundamental en estudios orientados a la toma de decisiones basada en datos y a la optimización de procesos de negocio.
+
+Figura 3. Estructura de un árbol de decisión 
+
+
+La literatura evidencia un uso extendido de los árboles de decisión en distintos campos. En el ámbito social, se han empleado para analizar patrones de victimización vinculados con violencia de género, utilizando variables como la edad, convivencia con el agresor y características sociodemográficas para diseñar modelos predictivos que apoyan políticas públicas (Farouk & Nasser, 2020).
+En educación, estudios como el realizado en Poza Rica, Veracruz, identifican la preparación académica previa y la participación en tutorías como los factores más influyentes en el rendimiento de estudiantes de ingeniería (Díaz Martínez et al., 2021). En contextos digitales, investigaciones en jóvenes chilenos han utilizado árboles de decisión para predecir plataformas preferidas en redes sociales, destacando Instagram como la red más utilizada (Painén-Aravena et al., 2019).
+En el sector financiero, los árboles de decisión permiten predecir el incumplimiento crediticio en el primer año de otorgamiento, facilitando la gestión preventiva del riesgo (Cardona Hernández Paola Andrea, 2004) . De igual manera, en telecomunicaciones se han utilizado para identificar fallas en procesos de handover entre antenas y zonas críticas de pérdida de señal(Párraga Villamar et al., 2023) . También se han aplicado a la predicción del abandono voluntario (churn), tanto de manera independiente como combinados con redes neuronales ((Contreras Morales et al., 2017); (Lozano Núñez, 2014)). Finalmente, estudios en España muestran que este tipo de modelos también permiten analizar el impacto de factores sociofamiliares en el rendimiento académico (Rodríguez Rodríguez et al., 2022).
+Existen numerosos estudios recientes que emplean árboles de decisión y otros modelos de clasificación para la predicción del comportamiento y la rentabilidad de los clientes. En el ámbito del marketing y la analítica comercial, estos modelos se han utilizado para identificar patrones de compra, estimar el Customer Lifetime Value (CLV) y anticipar el abandono voluntario, permitiendo a las organizaciones diseñar estrategias de segmentación, retención y personalización basadas en evidencia.
+Por ejemplo, (Alejandra et al., 2022)utilizaron regresión lineal múltiple y Random Forest para analizar e identificar clientes potenciales con impacto en la cartera de negocios de una empresa de seguros. Sus resultados mostraron que variables de tipo socioeconómico, geográfico y el ingreso mensual fueron las más determinantes en la predicción del perfil del cliente.
+De manera similar, (Garcés & González, 2019)aplicaron modelos supervisados a datos crediticios en un proceso de minería de datos orientado a clasificar el nivel de rentabilidad de los clientes (baja, media, alta). En su estudio, las pérdidas asociadas a clientes con rentabilidad baja se identificaron como la variable más influyente en el modelo, con implicaciones directas para la gestión del riesgo y la toma de decisiones financieras.
+ (Damián García Noya, 2022)empleó árboles de decisión y Gradient Boosting para mejorar la precisión de los sistemas de Next Best Offer (NBO) en una corporación bancaria. Es importante destacar que el enfoque NBO —cuyo objetivo es determinar la siguiente mejor oferta para cada cliente— se basa en un proceso de perfilamiento individual, mediante el cual se recomienda el producto más relevante para cada usuario. Sin embargo, este enfoque tradicionalmente no incorpora de manera explícita ciertas características intrínsecas del cliente. El estudio concluye que la aplicación de modelos basados en árboles permite identificar la importancia de variables como los canales de marketing, las preferencias de comunicación, y otros atributos que influyen directamente en la efectividad de la oferta personalizada.
+La literatura también ha comparado diferentes algoritmos supervisados para determinar su desempeño en contextos empresariales. Diversos estudios coinciden en que:
+Random Forest supera en precisión a los árboles simples, pero disminuye la interpretabilidad.
+Regresión logística es útil cuando la relación entre variables es lineal o se busca un modelo altamente interpretable.
+Gradient Boosting y XGBoost suelen ofrecer mejor rendimiento general, aunque requieren mayor complejidad computacional.
+Investigaciones de (ESPINOZA MAVILA & AREVALO SARCE, 2023) sostienen que los árboles de decisión continúan siendo relevantes como punto de partida en análisis empresariales, debido a su claridad, bajo costo computacional e idoneidad para explicar decisiones.
+2.3.Conclusiones
+Considerando que el propósito de este estudio es identificar las variables que influyen en la aceptación de una oferta con tarifa Next Best Offer (NBO) y determinar los factores que inciden en su rentabilidad, se revisaron investigaciones previas que aplican modelos basados en árboles de decisión. La literatura evidencia que esta técnica resulta especialmente adecuada para identificar las variables más determinantes sobre una variable objetivo, gracias a su estructura jerárquica, su capacidad para modelar relaciones no lineales y su alto nivel de interpretabilidad, lo que la convierte en una herramienta valiosa para el diseño de estrategias de marketing más eficaces y focalizadas.
+En el sector de las telecomunicaciones, los árboles de decisión han sido utilizados principalmente en problemáticas de carácter técnico, tales como la identificación de fallas en la red, el análisis de procesos de handover o la detección de zonas críticas de pérdida de señal   (O’RYAN BLÁZQUEZ, 2025). Asimismo, algunos estudios han abordado la predicción del abandono voluntario (churn), confirmando la utilidad de los modelos de clasificación en el análisis del comportamiento del cliente. No obstante, la revisión realizada muestra que la aplicación de estos modelos en procesos de fidelización, aceptación de ofertas comerciales y análisis de rentabilidad sigue siendo limitada, especialmente cuando se considera un enfoque de personalización como el NBO.
+Si bien existen investigaciones en otros sectores —principalmente el financiero— que aplican modelos de clasificación para mejorar sistemas de recomendación NBO, estas se centran mayormente en el desempeño predictivo del modelo, dejando en un segundo plano el análisis explicativo de las variables que influyen en la aceptación de la oferta y su impacto en la rentabilidad. En el contexto de las telecomunicaciones, esta brecha es aún más evidente, ya que son escasos los estudios que integran simultáneamente la lógica de personalización del NBO, la identificación de variables relevantes y el análisis de la rentabilidad asociada a la oferta.
+Asimismo, aunque la literatura reciente destaca que modelos más complejos como Random Forest o Gradient Boosting suelen presentar mayor precisión, también se reconoce que los árboles de decisión mantienen su relevancia como modelos interpretables, especialmente en contextos empresariales donde la comprensión del proceso de decisión es fundamental para transformar los resultados analíticos en acciones comerciales concretas.
+En este contexto, el presente estudio se diferencia y complementa los trabajos previos al aplicar árboles de decisión al análisis de la aceptación de una oferta con tarifa NBO en el sector de las telecomunicaciones, incorporando explícitamente una perspectiva de rentabilización y fidelización del cliente. De este modo, la investigación busca contribuir a cerrar un vacío identificado en el estado del arte, aportando evidencia empírica sobre los factores que influyen en la aceptación de la oferta y en su rentabilidad, y proporcionando una base analítica para el desarrollo de estrategias de marketing más eficientes, personalizadas y sostenibles.
+
+
+
+3.Objetivos concretos y metodología de trabajo
+3.1.Objetivo general
+Identificar las variables que inciden de manera significativa en la rentabilidad de los clientes del segmento Fijo de Claro Colombia ante la aplicación de tarifas Next Best Offer (NBO), mediante la construcción y comparación del desempeño predictivo de distintos modelos de clasificación supervisada, con el fin de apoyar la toma de decisiones en los procesos de fidelización y personalización de ofertas.[El objetivo general está alineado con el enfoque del trabajo, pero su formulación puede ser más precisa para reflejar mejor el tipo de análisis y resultados que se espera obtener. 
+
+Actualmente, se describe la intención de identificar variables que inciden en la rentabilidad al aplicar tarifas NBO, pero no se especifica el enfoque predictivo ni los métodos comparativos que se utilizarán. 
+
+Se sugiere reformular el objetivo general para integrar los elementos clave del trabajo: la aplicación de modelos de clasificación supervisada, el enfoque comparativo entre técnicas y el contexto empresarial. 
+
+Una propuesta de redacción sería:
+Identificar las variables que más inciden en la rentabilidad de clientes del segmento Fijo de Claro Colombia al aplicar tarifas NBO, mediante la comparación del desempeño predictivo de distintos modelos de clasificación supervisada.][ok]
+3.2.Objetivos específicos
+Recopilar, depurar y preparar el conjunto de datos correspondiente a los clientes del segmento Fijo de Claro Colombia con aplicación de tarifas Next Best Offer (NBO), garantizando su calidad y consistencia para el análisis posterior.
+Realizar un análisis exploratorio de datos (EDA) que permita caracterizar las variables del estudio mediante análisis descriptivo, identificación de valores atípicos, detección de patrones y exploración de relaciones preliminares entre las variables explicativas y la variable objetivo.
+Desarrollar y entrenar modelos de clasificación supervisada, incluyendo árboles de decisión, Random Forest y regresión logística, orientados a la predicción de la aceptación de tarifas NBO.
+Validar y evaluar el desempeño predictivo de los modelos desarrollados mediante métricas de evaluación adecuadas, con el fin de comparar su capacidad predictiva, robustez y generalización en el contexto del análisis de fidelización.
+Seleccionar el modelo con mejor desempeño global, considerando tanto criterios predictivos como interpretativos, de acuerdo con su aplicabilidad al análisis de aceptación y rentabilidad de tarifas NBO.
+Identificar y analizar las variables con mayor influencia en el modelo seleccionado, mediante el estudio de su importancia relativa, con el propósito de generar insights estratégicos que apoyen la toma de decisiones en los procesos de fidelización y personalización de ofertas.[Los objetivos específicos no están formulados como una lista clara ni siguen un criterio estructurado que permita vincularlos directamente con las etapas del trabajo. 
+
+Además, algunos enunciados son demasiado generales y no permiten identificar con claridad las acciones que se llevarán a cabo ni los resultados esperados. 
+
+Para mejorar este apartado, es recomendable formular cada objetivo en infinitivo, centrado en tareas concretas y medibles que den soporte al objetivo general. A continuación, se propone una posible reformulación de los objetivos específicos sobre los cuales podrías hacer una redacción más precisa:
+Recopilar y preparar el conjunto de datos del segmento Fijo con tarifas NBO para su análisis.
+Explorar las variables mediante análisis exploratorio de datos (EDA) para detectar patrones relevantes.
+Desarrollar modelos de clasificación supervisada (árboles de decisión, Random Forest, regresión logística).
+Comparar el rendimiento de los modelos aplicando métricas de evaluación adecuadas.
+Determinar las variables con mayor impacto en la predicción de la rentabilidad.][Ok
+][]
+3.3.Metodología del trabajo 
+El presente proyecto adopta un enfoque cuantitativo sustentado en el análisis sistemático de datos históricos correspondientes a los meses de agosto, septiembre y octubre, y se inscribe dentro del ámbito de los estudios predictivos aplicados a la analítica de negocio. El propósito fundamental del estudio es modelar, analizar e interpretar el comportamiento de los clientes frente a la aceptación de una tarifa Next Best Offer (NBO), empleando técnicas avanzadas de aprendizaje automático.
+Desde una perspectiva metodológica, el trabajo se orienta a la construcción, entrenamiento, validación y comparación de diversos modelos de machine learning, formulados para abordar un problema de clasificación binaria. En este contexto, la variable objetivo representa la decisión del cliente respecto a la tarifa NBO, codificada como aceptación (1) o rechazo (0), lo que permite evaluar de manera objetiva la capacidad predictiva de los modelos desarrollados.
+El proceso analítico comprende varias etapas claramente definidas, que incluyen la preparación y depuración del conjunto de datos, el análisis exploratorio de las variables explicativas y la posterior implementación de algoritmos de clasificación supervisada. Asimismo, se incorporan métricas de evaluación adecuadas para medir el desempeño de los modelos, garantizando su robustez, capacidad de generalización y aplicabilidad en un entorno real de negocio.
+De este modo, el enfoque metodológico adoptado no solo permite identificar patrones relevantes en el comportamiento de los clientes, sino también generar insights accionables que apoyen la toma de decisiones estratégicas relacionadas con la optimización de las ofertas comerciales, la fidelización de clientes y la maximización de la rentabilidad en el contexto de las tarifas NBO.
+Para garantizar un proceso sistemático, riguroso y reproducible, la metodología se estructura siguiendo las fases del Ciclo de Vida de Proyectos de Ciencia de Datos CRISP-DM (Cross-Industry Standard Process for Data Mining), ampliamente utilizado en proyectos de analítica avanzada y ciencia de datos por su enfoque iterativo y orientado al negocio (Cobos et al., 2010).
+Fases:
+Fase I: Comprensión del Negocio y Obtención de Datos
+El trabajo inicia con la definición clara de la variable objetivo: la aceptación (1) o el rechazo (0) de la tarifa NBO.
+Fuente de Datos: Se utilizará un conjunto de datos transaccionales y demográficos de clientes activos de la empresa, abarcando un período de los últimos 3 meses.
+Variables de Entrada: Se identificarán y seleccionarán variables candidatas a ser predictoras. Estas incluyen variables demográficas como región, numéricas, boleanas, fecha, y categóricas 
+Fase II: Preparación y Análisis Exploratorio de Datos (EDA)
+Esta fase se enfoca en asegurar la calidad y la estructura adecuada del dataset.
+Limpieza y Preprocesamiento: Se abordará el manejo de valores perdidos mediante técnicas de imputación (ej. la media o moda) y se detectarán y gestionarán los valores atípicos (outliers) mediante métodos estadísticos robustos (ej. el rango intercuartílico).
+Transformación de Variables: Las variables categóricas se convertirán a formato numérico utilizando One-Hot Encoding para aquellas sin un orden intrínseco.
+Fase III: Modelado y Optimización
+Se seleccionarán y entrenarán múltiples algoritmos de Machine Learning para encontrar el mejor predictor de la aceptación de la tarifa NBO.
+Selección de Algoritmos: Se emplearán tres modelos principales:
+oRegresión Logística: Como baseline por su alta interpretabilidad y capacidad de determinar la dirección del impacto de las variables.
+oRandom Forest: Por su robustez y su capacidad para manejar relaciones no lineales y evitar el overfitting.
+oXGBoost: Un algoritmo de Boosting avanzado, conocido por ofrecer el mayor rendimiento predictivo en tareas de clasificación.
+Optimización: La optimización de los hiperparámetros de los modelos se realizará mediante Validación Cruzada (k-fold) y búsqueda en grilla (Grid Search) sobre el conjunto de validación.
+Fase IV: Evaluación, Interpretación y Resultados
+El modelo final se evaluará en el conjunto de prueba, que permanece intacto hasta este momento, asegurando una evaluación imparcial de la capacidad de generalización.
+Identificación de Influencia: Se utilizarán las funcionalidades de Importancia de Características (Feature Importance) de los modelos de árbol o los coeficientes estandarizados para identificar las variables más influyentes en la decisión del cliente, cumpliendo así con el objetivo principal del TFM.
+Visualización de Resultados: Los insights clave y las curvas de rendimiento del modelo se presentarán mediante gráficos descriptivos y predictivos para facilitar la toma de decisiones gerenciales.
+Herramientas y Tecnologías
+El desarrollo del proyecto se ejecutará en el lenguaje de programación Python (v. 3.13). Las principales librerías utilizadas serán:
+Manipulación y Análisis de Datos: Pandas y NumPy.
+Modelado Predictivo: Scikit-learn, XGBoost.
+Visualización: Matplotlib y Seaborn.
+Entorno de Desarrollo: Se utilizarán Jupyter Notebooks para la documentación y ejecución secuencial del código.[El apartado presenta una estructura clara basada en el enfoque CRISP-DM, lo cual es adecuado y coherente con las directrices metodológicas recomendadas para proyectos de ciencia de datos. 
+
+Se describen las fases principales del ciclo de vida del proyecto, desde la comprensión del negocio hasta la evaluación, y se explican las técnicas y herramientas que se aplicarán. Sin embargo, hay algunos aspectos que es necesario revisar y mejorar:
+
+La frase “desde la comprensión inicial del negocio hasta la implementación y evaluación de los resultados obtenidos” aparece repetida, lo que debe corregirse para evitar redundancia. 
+Aunque se justifica el uso de ciertos algoritmos (regresión logística, Random Forest, XGBoost), no se especifica claramente en qué medida cada uno será evaluado o priorizado. Sería útil incluir los criterios que se usarán para comparar el rendimiento (por ejemplo, precisión, recall, F1-score, AUC).
+En la selección de modelos, la regresión logística se menciona como baseline, pero no se aclara si el énfasis estará en interpretabilidad o en maximización del rendimiento predictivo. Esto debería aclararse, especialmente porque XGBoost y Random Forest no son modelos fácilmente interpretables.
+CRISP-DM incluye una fase de “despliegue”, que aunque puede ser mínima en un TFM, debería al menos mencionarse (por ejemplo, simulación de uso o presentación a stakeholders internos). Esto completaría el ciclo metodológico.
+Las fases están correctamente detalladas, pero no se vinculan explícitamente con los objetivos específicos planteados en el subapartado 3.2. Sería útil cerrar el apartado con un párrafo que indique cómo la metodología definida permitirá alcanzar esos objetivos.
+No se incluyen referencias bibliográficas que respalden el uso de CRISP-DM, ni las propiedades de los modelos utilizados. Se recomienda incorporar referencias para CRISP-DM y justificar el uso de modelos como XGBoost o Random Forest en tareas de clasificación binaria.][OK]
+
+
+
+
+
+
+4.Marco normativo
+[El apartado presenta una primera aproximación al marco normativo, destacando las medidas de protección aplicadas sobre los datos utilizados y haciendo referencia al RGPD y la LOPDGDD. Sin embargo, dado que el trabajo se desarrolla en el contexto de una empresa operativa en Colombia, es necesario incorporar también la normativa local correspondiente, como la Ley 1581 de 2012 sobre protección de datos personales y el Decreto 1377 de 2013, que regula su aplicación. 
+
+Asimismo, se sugiere ampliar el contenido incluyendo principios éticos relacionados con el uso de modelos de inteligencia artificial y la toma de decisiones automatizadas, especialmente al tratarse de un proceso de clasificación aplicado a clientes reales. 
+
+Finalmente, sería útil incluir una breve mención al marco interno de seguridad y uso de datos de Claro Colombia si existen directrices formales disponibles. 
+
+Esta ampliación permitirá al capítulo reflejar con mayor precisión la totalidad de las obligaciones legales, éticas y organizativas vinculadas al uso de información sensible en el TFM. 
+
+Es fundamental que este capítulo no solo describa medidas, sino que esté respaldado por citas y referencias normativas correctamente presentadas en formato APA, tanto para las leyes mencionadas como para cualquier marco ético o técnico citado ] En el ámbito europeo, el tratamiento de la información se ha ajustado a lo dispuesto en el Reglamento ((UE)  2016/  679, 2016) del Parlamento Europeo y del Consejo, conocido como Reglamento General de Protección de Datos (RGPD), así como a la (Ley Orgánica 3/2018 (LOPDGDD), 2018)de Protección de Datos Personales y garantía de los derechos digitales (LOPDGDD). Estas normativas establecen los principios de licitud, lealtad, transparencia, minimización de datos, limitación de la finalidad y seguridad del tratamiento, los cuales han sido considerados durante todo el desarrollo del proyecto.
+Dado que el estudio se enmarca en el contexto operativo de una empresa ubicada en Colombia, también se ha tenido en cuenta la normativa colombiana en materia de protección de datos personales, en particular la (Ley 1581 de 2012, 2012), que establece el régimen general de protección de datos personales, y el (Decreto 1377 de 2013, 2013), que reglamenta parcialmente dicha ley. Estas disposiciones regulan el tratamiento de datos personales bajo principios como la finalidad, libertad, veracidad, transparencia, acceso y circulación restringida, seguridad y confidencialidad, los cuales han sido respetados en el desarrollo del TFM.
+Medidas técnicas y organizativas aplicadas
+Para garantizar la protección de la información utilizada, se han implementado las siguientes medidas técnicas y organizativas:
+Seudonimización de los datos: El conjunto de datos fue entregado por Claro Colombia en formato seudonimizado. En ningún momento se tuvo acceso a identificadores directos tales como nombres, números de identificación, direcciones u otros elementos que permitieran la identificación individual de los titulares de los datos.
+Uso exclusivo con fines académicos: Los datos se emplearon única y exclusivamente con fines académicos y de investigación, en coherencia con los objetivos del presente TFM, sin ningún uso comercial ni operativo fuera de este contexto.
+Confidencialidad y restricción de acceso: El conjunto de datos original, así como cualquier código o elemento técnico que pudiera permitir el acceso a sistemas corporativos, no se incluye en el documento final ni se deposita en repositorios públicos o de libre acceso.
+Publicación limitada de resultados: El trabajo presenta únicamente resultados agregados, métricas globales y conclusiones interpretativas, evitando la exposición de información sensible o la posibilidad de reidentificación de clientes o procesos internos de la empresa.
+Consideraciones éticas y uso responsable de modelos de inteligencia artificial
+Adicionalmente al cumplimiento normativo, el desarrollo del proyecto ha incorporado principios éticos asociados al uso de modelos de inteligencia artificial y sistemas de toma de decisiones automatizadas, especialmente relevantes al tratarse de un proceso de clasificación aplicado a clientes reales.
+En este sentido, se han considerado principios como la transparencia, la explicabilidad de los modelos, la equidad, la no discriminación y la responsabilidad en el uso de los resultados, alineados con las recomendaciones de marcos éticos internacionales sobre inteligencia artificial. La selección de modelos interpretables, como la regresión logística y los árboles de decisión, responde a la necesidad de comprender y explicar los factores que influyen en la aceptación de ofertas, evitando decisiones opacas que puedan afectar negativamente a los clientes.
+Asimismo, los resultados del modelo se conciben como una herramienta de apoyo a la toma de decisiones, y no como un mecanismo automático y excluyente, manteniendo siempre la supervisión humana en los procesos de fidelización y personalización de ofertas.
+Marco organizativo interno
+La autora declara haber respetado en todo momento los protocolos internos de seguridad, confidencialidad y uso responsable de la información definidos por Claro Colombia, en la medida en que estos han sido comunicados para el desarrollo del proyecto académico. Dichos lineamientos organizativos complementan el marco legal y ético, reforzando el compromiso con la protección de la información y el uso responsable de los datos corporativos.
+
+5.Desarrollo específico de la contribución
+La principal contribución metodológica de este Trabajo de Fin de Máster reside en la aplicación comparativa de modelos de clasificación supervisada para analizar la aceptación de tarifas Next Best Offer (NBO) en el sector de las telecomunicaciones, integrando criterios de rendimiento predictivo e interpretabilidad.
+A diferencia de enfoques centrados exclusivamente en la maximización de la precisión del modelo, este trabajo combina algoritmos con distintos niveles de complejidad —regresión logística, Random Forest y XGBoost—, lo que permite evaluar los compromisos existentes entre capacidad predictiva y explicabilidad del modelo. Esta aproximación resulta especialmente relevante en contextos empresariales, donde la interpretación de los resultados es un factor clave para su adopción en procesos de fidelización y en la toma de decisiones estratégicas.
+Asimismo, la adopción del marco CRISP-DM garantiza un proceso metodológico sistemático, reproducible y alineado con el problema de negocio, reforzando la coherencia y validez del enfoque propuesto.
+Contribución empírica
+Desde una perspectiva empírica, el trabajo aporta evidencia basada en datos reales de clientes del segmento Fijo de Claro Colombia, correspondientes a un período reciente de actividad comercial. Este tipo de información, de difícil acceso en la literatura académica, permite analizar el comportamiento real de aceptación de ofertas NBO en un entorno operativo concreto.
+La investigación amplía el cuerpo de conocimiento existente al trasladar el análisis de modelos de clasificación y estrategias NBO —frecuentemente estudiados en el sector financiero— al ámbito de las telecomunicaciones, donde la literatura se ha centrado mayoritariamente en problemáticas técnicas o en la predicción del abandono voluntario (churn).
+Contribución analítica e interpretativa
+El estudio contribuye también desde un enfoque analítico e interpretativo, al identificar y jerarquizar las variables que influyen en la aceptación y la rentabilidad de las tarifas NBO, proporcionando una lectura explicativa del comportamiento del cliente.
+
+El uso de modelos interpretables y de técnicas de análisis de importancia de variables permite transformar los resultados predictivos en insights accionables, facilitando la comprensión de los factores que condicionan la respuesta del cliente ante una oferta personalizada. Esta perspectiva explicativa complementa estudios previos que se han centrado principalmente en métricas de desempeño del modelo, sin profundizar en la interpretación de los resultados.
+Contribución práctica y organizativa
+Finalmente, el trabajo ofrece una contribución práctica al proponer un enfoque analítico aplicable a los procesos de fidelización y personalización de ofertas en el sector de las telecomunicaciones. Los resultados obtenidos pueden servir como base para el diseño de estrategias comerciales más focalizadas, orientadas a maximizar la rentabilidad y mejorar la experiencia del cliente.
+Adicionalmente, la simulación de un posible despliegue del modelo como herramienta de apoyo a la toma de decisiones evidencia la viabilidad de integrar técnicas de aprendizaje automático en entornos empresariales reales, respetando consideraciones éticas, normativas y organizativas.
+
+
+
+
+
+
+
+
+
+6.Código fuente y datos analizados
+6.1. Código fuente
+En el siguiente enlace se encuentra alojado el código utilizado para el desarrollo del TFM:
+https://github.com/sinkarito-alt/unirtfm/tree/main
+6.2.Datos Analizados
+En la Figura 4 se visualizan 32 variables categóricas y 16 variables numéricas asociadas al conjunto de muestras analizadas. Del total de observaciones, únicamente el 19,17% satisface la condición establecida, lo que evidencia una marcada reducción en la proporción de datos que cumplen el criterio definido.
+
+
+
+Figura 4. Resumen Estadístico del Dataset
+
+
+Las Figuras 5 y 6 presentan de manera detallada los campos que cumplen con las condiciones establecidas para la construcción de la variable objetivo. Estas visualizaciones permiten identificar con precisión qué atributos del conjunto de datos satisfacen los criterios definidos, facilitando así la depuración, selección y validación de las variables relevantes para el modelo analítico.
+Figura 5. Distribución de Rentabilizo
+
+
+Figura 6. Distribución de Tarifa NBO
+
+
+En la figura se presentan los histogramas correspondientes a las seis variables numéricas con mayor relevancia en el conjunto de datos. A partir de estas visualizaciones se pueden identificar patrones importantes sobre la distribución y el comportamiento de cada variable.
+En primer lugar, la variable Total Marcaciones muestra una distribución altamente concentrada en un único valor, lo cual sugiere que no existe variabilidad significativa y, por tanto, esta variable podría no aportar información relevante al modelo.
+Por otra parte, las variables MESES_ANTIGÜEDAD y MESES_ANTIGÜEDAD_INSTALACIÓN presentan distribuciones sesgadas hacia la izquierda, concentrando la mayoría de los registros en valores bajos. Esto indica que la mayor parte de los datos corresponden a clientes o instalaciones relativamente recientes, mientras que los valores altos son poco frecuentes.
+Figura 7. Histograma de meses de antigüedad 
+
+Figura 8 Histograma de meses de instalación 
+
+Figura 9 Histograma de Fecha 
+
+Figura 10 Histograma de Hora
+
+
+De acuerdo con la metodología establecida, se procederá a seleccionar el modelo predictivo que ofrezca el mejor desempeño para identificar la variable con mayor relevancia en la asignación de tarifas NBO. Para este propósito, se empleará la matriz de confusión, una herramienta fundamental que permite evaluar de manera integral el rendimiento de cada modelo, analizando su capacidad para clasificar correctamente las observaciones y detectar posibles errores en las predicciones.
+Tabla 1. Matriz de Confusión
+ 	Regresión Logística	Random Forest	XGBoost
+Accuracy CV	　　84.42%	　　98.97%	　　98.98%
+Accuracy Test	　　84.45%	　　98.97%	　　98.97%
+ROC-AUC	　　0.9385	　　0.9987	　　0.9991
+F1-Score	　　0.5559	　　0.9734	　　0.9735
+Ventajas	　　Rápido, interpretable, estable	　　Alto rendimiento, robusto, árboles interpretables	　　Mejor rendimiento, eficiente, mejor ROC-AUC
+Desventajas	　　Menor accuracy que árboles	　　Más lento que regresión logística	　　Requiere más tiempo de entrenamiento
+
+Figura 11. Comparación de Métricas Básicas
+
+
+Al analizar los resultados obtenidos para los tres modelos evaluados, se evidencia que el modelo con mayor inestabilidad es la Regresión Logística, dado que presenta los valores más bajos en Accuracy, ROC-AUC y F1-Score.
+Por su parte, los modelos Random Forest y XGBoost muestran un rendimiento significativamente superior y muy similar entre sí en todos los indicadores evaluados. No obstante, considerando las ligeras diferencias a favor de XGBoost, especialmente en el valor de ROC-AUC y F1-Score, así como las ventajas relacionadas con su eficiencia y capacidad de optimización, se determina que el modelo más adecuado para este estudio es XGBoost.
+Es importante aclarar que en este ejercicio se implementaron los tres modelos con la misma profundidad y bajo las mismas condiciones de entrenamiento. Tanto Random Forest como XGBoost presentaron resultados finales casi idénticos; sin embargo, XGBoost mantiene una ligera superioridad técnica que justifica su selección como modelo final.
+A continuación, se visualiza las variables y su homologación para la construcción del árbol de decisión.
+Tabla 2. Valores de Variable 
+Feature_X	Nombre_Real
+Feature_0	Total Marcaciones
+Feature_1	MESES_ANTIGUEDAD
+Feature_2	MESES_ANTIGUEDAD_INSTALACION
+Feature_3	Msh Cuenta
+Feature_4	Msh Fecha (copia)
+Feature_5	Msh Hora
+Feature_6	Msh Hora (copia)
+Feature_7	MSH_CEDULA
+Feature_8	MSH_LOGIN_ID
+Feature_9	MSH_TIPO_CLIENTE
+Feature_10	RENTA_MES_ACTUAL
+Feature_11	RENTA_MES_ANTERIOR
+Feature_12	SIN TARIFA
+Feature_13	VECES_CONSULTADA
+Feature_14	Vlr Diferencia Act Ant
+Feature_15	Msh Divisional
+Feature_16	Msh Canal
+Feature_17	MOVIMIENTO_RENTA
+Feature_18	Msh Proceso
+Feature_19	Msh Ser Activos
+Feature_20	MSH_AREA
+Feature_21	MSH_DIVISION
+Feature_22	MSH_ESTADO
+Feature_23	MSH_GRUPO
+Feature_24	MSH_OPERACION
+Feature_25	MSH_PROCESO_SRV
+Feature_26	MSH_RAZON
+Feature_27	MSH_TIPO_SERVICIO
+Feature_28	PROCESOS 2
+
+
+
+Figura 12. Arboles de Decisión 
+
+
+Figura 13. Top Variables Más Importantes
+_
+Figura 14 Distribución  Variables Más Importantes
+
+
+
+Figura 15. Matriz de confusión 
+
+
+El árbol de decisión surrogado, con una profundidad máxima de cinco niveles, permitió identificar el Top 10 de las variables más relevantes del modelo predictivo, proporcionando una visión interpretable de los principales factores que influyen en la rentabilización de una tarifa de Next Best Offer (NBO) para el segmento Hogar. De manera complementaria, el análisis de importancia de características evidenció que Feature_9 (MSH_TIPO_CLIENTE) es, con diferencia, la variable más influyente, concentrando el 93,47% de la importancia total del modelo.
+Este resultado pone de manifiesto que el tipo de cliente constituye el principal determinante en la capacidad del modelo para predecir la rentabilidad de una tarifa NBO. En la práctica, la mayor parte de la señal predictiva se explica a partir de la segmentación del cliente según su tipología, mientras que el resto de las variables desempeñan un rol claramente secundario, orientado a la refinación de decisiones en escenarios frontera y a la mejora marginal de la clasificación.
+La elevada concentración de importancia en esta variable sugiere que el modelo presenta una estructura altamente dependiente de características de naturaleza estructural, lo cual refuerza su coherencia desde el punto de vista del negocio. En este sentido, el tipo de cliente actúa como un resumen implícito de múltiples dimensiones del comportamiento y del valor del usuario, facilitando una toma de decisiones clara, consistente y alineada con las políticas comerciales de la compañía.    
+Adicionalmente, se observa que MSH_TIPO_CLIENTE presenta una alta correlación con el score o calificación interna asignada por la compañía a cada cliente, lo que explica su elevado poder explicativo dentro del modelo. Esta relación sugiere que la variable integra información histórica relevante sobre riesgo, valor y comportamiento del cliente, convirtiéndose en un proxy eficaz de la propensión a la rentabilización de la oferta. No obstante, esta dependencia también pone de relieve la importancia de monitorizar posibles efectos de redundancia o sesgo, especialmente en contextos donde la estabilidad temporal y la explicabilidad del modelo son requisitos críticos.
+En conjunto, estos hallazgos confirman que el modelo combina un alto rendimiento predictivo con un elevado grado de interpretabilidad, permitiendo su aplicación práctica en entornos reales de decisión comercial, al tiempo que facilita su justificación ante audiencias técnicas y de negocio.
+7.Conclusiones
+El presente Trabajo Fin de Máster tuvo como objetivo principal analizar la aceptación y rentabilidad de las tarifas Next Best Offer (NBO) en clientes del segmento Fijo de Claro Colombia, mediante el uso de técnicas de análisis exploratorio de datos y modelos de machine learning supervisado. El problema abordado surge de la necesidad de optimizar los procesos de fidelización y personalización de ofertas, identificando tanto el modelo predictivo más adecuado como las variables con mayor capacidad explicativa en dicho contexto.
+Para abordar este problema, se siguió una metodología estructurada que incluyó la preparación y depuración del conjunto de datos, el desarrollo de un análisis exploratorio (EDA) y la construcción, validación y comparación de distintos modelos de clasificación. Esta aproximación permitió evaluar de forma objetiva el desempeño de cada modelo y extraer conclusiones sólidas desde el punto de vista tanto técnico como de negocio.
+En relación con el primer objetivo específico, centrado en la recopilación, depuración y preparación de los datos, se logró construir un conjunto de datos consistente y de calidad, adecuado para el análisis posterior. Este paso resultó fundamental para garantizar la fiabilidad de los modelos desarrollados y la validez de los resultados obtenidos.
+Respecto al análisis exploratorio de datos (EDA), los resultados permitieron caracterizar las principales variables del estudio e identificar patrones relevantes. A partir de este análisis preliminar, se observó que variables como MESES_ANTIGÜEDAD y MESES_ANTIGÜEDAD_INSTALACIÓN presentaban una relación aparente significativa con la variable objetivo, lo que inicialmente sugería que la permanencia del cliente era un factor clave en la aceptación de las tarifas NBO. Este hallazgo cumplió el objetivo de generar hipótesis iniciales que posteriormente serían contrastadas mediante modelos predictivos.
+En cuanto al desarrollo y comparación de modelos de clasificación supervisada, se entrenaron modelos de regresión logística, Random Forest y XGBoost. La evaluación de su desempeño mediante métricas como la matriz de confusión y el área bajo la curva ROC (ROC-AUC) permitió identificar que XGBoost fue el modelo con mejor rendimiento global, destacando por su mayor capacidad predictiva, eficiencia y robustez frente a los demás enfoques analizados. De este modo, se dio cumplimiento al objetivo de identificar el método de machine learning más adecuado para el problema planteado.
+Una vez seleccionado el modelo óptimo, se abordó el análisis de importancia de variables, cumpliendo el objetivo de identificar los factores con mayor influencia en la predicción. En este punto, se evidenció un resultado clave del trabajo: mientras que el EDA sugería que la antigüedad del cliente era el factor más relevante, el modelo XGBoost reveló que MSH_TIPO_CLIENTE es la variable con mayor impacto en la rentabilización de una tarifa NBO, concentrando el 93,47% de la importancia total del modelo. Este hallazgo constituye la segunda gran contribución del TFM y pone de manifiesto que la tipología del cliente actúa como el principal determinante en la toma de decisiones del modelo.
+Asimismo, se observó que esta variable presenta una alta correlación con el score o calificación interna asignada por la compañía a sus clientes, lo que explica su elevado poder explicativo y su capacidad para resumir múltiples dimensiones del comportamiento, valor y riesgo del cliente. Este resultado refuerza la coherencia del modelo desde el punto de vista del negocio y aporta una interpretación clara y accionable para los procesos de fidelización y personalización de ofertas.
+En conclusión, este trabajo ha permitido resolver los objetivos planteados al identificar el modelo de machine learning más adecuado para la predicción de aceptación de tarifas NBO y al determinar las variables clave que influyen en dicho proceso. Los resultados obtenidos aportan valor tanto a nivel académico, al evidenciar la diferencia entre análisis exploratorio y modelos predictivos avanzados, como a nivel práctico, al proporcionar insights estratégicos que pueden apoyar la toma de decisiones comerciales en el segmento Hogar de Claro Colombia.
+Figura 16 Distribución de cuentas con tarifa NBO por rango de meses 
+
+
+La figura 16, correspondiente al rango de meses que los clientes llevan con una tarifa NBO, evidencia una distribución altamente concentrada en los clientes con mayor antigüedad. En particular, el segmento de clientes con 100 meses o más representa el grupo predominante, con una diferencia significativa respecto a los demás rangos temporales.
+Este resultado sugiere que la adopción y permanencia en tarifas NBO se encuentra fuertemente asociada a clientes de larga trayectoria con la compañía, lo que puede interpretarse como un indicador de mayor fidelización y estabilidad contractual. En contraste, los rangos intermedios (51–74 y 75–99 meses) y los rangos más bajos presentan una participación considerablemente menor, lo que indica que los clientes con menor antigüedad tienen una presencia más reducida dentro de este tipo de tarifas.
+Desde una perspectiva de negocio, este hallazgo refuerza la hipótesis de que la antigüedad del cliente es un factor relevante en la estrategia NBO, ya que los clientes con mayor tiempo en la compañía suelen tener un mayor conocimiento del portafolio, mayor confianza en la marca y una relación comercial más consolidada, lo que facilita la aceptación de ofertas personalizadas.
+Figura 17 Distribucion de cuentas con tarifa NBO por Tipo Cliente
+
+La figura 17 muestra la distribución de clientes según su tipo, revelando una clara concentración en dos categorías principales: Tipo de Cliente 1 y Tipo de Cliente 2, que agrupan la inmensa mayoría de los clientes con tarifa NBO. El resto de las tipologías presenta una representación marginal, con volúmenes significativamente inferiores.
+Esta distribución sugiere que la estrategia NBO está principalmente orientada —o resulta más efectiva— en determinados perfiles de cliente, mientras que otros tipos presentan una baja penetración o relevancia dentro del esquema actual de ofertas. Asimismo, la existencia de valores nulos o categorías con muy baja frecuencia pone de manifiesto posibles oportunidades de mejora en la calidad de los datos o en la segmentación utilizada.
+Este resultado cobra especial relevancia al contrastarse con los modelos predictivos desarrollados posteriormente, donde la variable MSH_TIPO_CLIENTE emerge como la más influyente, concentrando más del 93% de la importancia total del modelo XGBoost. En este sentido, el EDA permite anticipar la relevancia estructural de esta variable, al evidenciar una fuerte diferenciación entre tipos de clientes desde una fase exploratoria.
+8. Limitaciones y prospectiva
+8.1.Limitaciones
+A pesar de los resultados obtenidos, el presente trabajo presenta una serie de limitaciones que es necesario considerar y que han condicionado parcialmente su desarrollo y alcance. Una de las principales limitaciones identificadas fue la dificultad para acceder e integrar fuentes de datos adicionales, particularmente aquellas relacionadas con variables geográficas y socioeconómicas.
+Si bien se identificaron posibles fuentes de información externas y se contó con descripciones generales de campos y tablas, el proceso de localización, comprensión e identificación precisa de dichas variables resultó complejo, debido a la falta de documentación detallada, estandarización y claridad en la gobernanza de los datos. Esta situación limitó la incorporación de variables potencialmente relevantes que podrían haber enriquecido el análisis y aportado una mayor capacidad explicativa a los modelos desarrollados.
+Como consecuencia, el estudio se centró principalmente en variables internas disponibles en los sistemas de la compañía, lo que, si bien permitió construir modelos con buen desempeño predictivo, restringe la posibilidad de capturar dimensiones externas del comportamiento del cliente, como el contexto socioeconómico o territorial, que podrían influir en la aceptación y rentabilidad de las tarifas Next Best Offer.
+Adicionalmente, esta limitación pone de manifiesto la importancia de contar con una estructura de gobernanza de datos más robusta, que facilite la trazabilidad, documentación y uso transversal de la información, especialmente en proyectos analíticos orientados a la toma de decisiones estratégicas.
+ 
+8.2.Trabajo futuro
+El trabajo desarrollado abre diversas líneas de investigación futura que podrían aportar un valor añadido tanto a nivel académico como aplicado. En primer lugar, la metodología empleada en este estudio podría extenderse al análisis de tarifas Next Best Offer (NBO) en otros segmentos de clientes, como el segmento Móvil, permitiendo evaluar si los factores identificados en el segmento Fijo mantienen su relevancia o si emergen nuevas variables determinantes en contextos con dinámicas de consumo y comportamiento diferentes.
+Asimismo, la aplicación del enfoque propuesto a otros segmentos facilitaría la identificación y comparación de variables clave entre líneas de negocio, lo que contribuiría a una visión más integral de los procesos de aceptación y rentabilización de ofertas NBO. Este análisis comparativo podría apoyar el diseño de estrategias comerciales más personalizadas y segmentadas, adaptadas a las características específicas de cada tipo de cliente.
+Por otra parte, futuros trabajos podrían incorporar nuevas fuentes de información, como variables geográficas, socioeconómicas o de comportamiento digital, con el objetivo de enriquecer los modelos predictivos y reducir la dependencia de variables estructurales altamente dominantes. La integración de este tipo de datos permitiría capturar dimensiones adicionales del contexto del cliente y mejorar la capacidad de generalización de los modelos.
+Finalmente, se plantea como línea futura la exploración de técnicas avanzadas de interpretabilidad, como SHAP o LIME, así como la validación temporal de los modelos, con el fin de analizar la estabilidad de las variables más influyentes a lo largo del tiempo. Estas extensiones reforzarían la aplicabilidad del enfoque desarrollado y su utilidad como herramienta de apoyo a la toma de decisiones en los procesos de fidelización y personalización de ofertas.
+
+
+Referencias bibliográficas
+Alejandra, M., Herrera, R., Daniela, A., & Buitrago, S. (2022). MODELO PREDICTIVO DE RENTABILIDAD PARA LA ATRACCIÓN DE CLIENTES A UN PROBLEMA DE NEGOCIO DE UNA ASEGURADORA Modelo predictivo de rentabilidad para la atracción de clientes a un problema de negocio de una aseguradora. www.udea.edu.co
+Anna Valtonen. (2020). APPLYING MACHINE LEARNING TO MARKETING: IMPLEMENTATION AND MANAGEMENT OF A NEXT BEST OFFER RECOMMENDATION MODEL IN THE FINANCIAL INDUSTRY.
+Arias, M. (2024). REV ELECT ANESTESIAR-VOL 16 (12) :4 El árbol y el laberinto. Árboles de decisión.
+Barrientos Martínez, R. E. , C. R. N. , A. M. H. G. , R. S. I. , G. T. M. del C. , P. L. P. , & B. M. S. L. (2009). ARTÍCULO ORIGINAL. www.uv.mx/rm
+Cardona Hernández Paola Andrea. (2004). Aplicación de árboles de decisión en modelos de riesgo crediticio. Revista Colombiana de Estadística.
+Claro. (2025a). Pex Modelo NBO Rentabilizacion Fija.
+Claro. (2025b). Tablero Indicadores Iniciativas Churn.
+Cobos, C., Zuñiga, J., Guarin, J., León, E., Mendoza, M., & English, I. (2010). CMIN-herramienta case basada en CRISP-DM para el soporte de proyectos de minería de datos CMIN-a CRISP-DM-based case tool for supporting data mining projects CMIN-HERRAMIENTA CASE BASADA EN CRISP-DM PARA EL SOPORTE DE … / CMIN-A CRISP-DM-BASED CASE TOOL FOR SUPPORTING DATA MINING PRO … INGENIERÍA E INVESTIGACIÓN VOL En español (Vol. 30, Issue 3).
+Contreras Morales, E. F., Ferreira Correa, F. M., & Valle, M. (2017). DISEÑO DE UN MODELO PREDICTIVO DE FUGA DE CLIENTES UTILIZANDO ÁRBOLES DE DECISIÓN. Revista Ingeniería Industrial, 16(1). https://doi.org/10.22320/s07179103/2017.01
+Damián García Noya, J. (2022). Trabajo Fin de Máster Desarrollo de un Priorizador para Campañas Comerciales Empleando Modelos Predictivos.
+Decreto 1377 de 2013. (2013). decreto1377-de-2013.
+Díaz Martínez, M. A., De Los, M., Cervantes, A. A., Patricia, J., & Morín, M. (2021). Decision Trees as a Methodology to Determine Academic Performance in Higher Education. In Revista Lasallista de Investigación (Vol. 18, Issue 2).
+ESPINOZA MAVILA, G., & AREVALO SARCE, A. (2023). ANÁLISIS DE REINCIDENCIA DEL PROGRAMA VOLVER A EMPEZAR UTILIZANDO REGRESIÓN LOGÍSTICA, RANDOM FOREST Y XGBOOST.
+Farouk, A. :, & Nasser, A. (2020). THE DECISION TREE IN THE ANALYSIS OF COEXISTENCE IN CASES OF FATAL VICTIMS OF GENDER VIOLENCE IN SPAIN. Journal of Science and Research, 5, 2528–8083. https://doi.org/10.5281/zenodo.4161179
+Garcés, C., & González, A. (2019). ¿Es un cliente confiable?... Minería de datos tradicional y Fintech para el cálculo de la rentabilidad. 593 Digital Publisher CEIT, 5–1(4), 79–90. https://doi.org/10.33386/593dp.2019.5-1.156
+La República. (2024, November 12). Claro, Tigo y Movistar, los jugadores que concentran 92% del mercado de internet . La República, 1–1.
+Ley 1581 de 2012. (2012). LEY TRATAMIENTO DE DATOS - LEY 1581 DE 2012.
+Ley Orgánica 3/2018 (LOPDGDD). (2018). Ley Orgánica 3/2018, de 5 de diciembre, de Protección de Datos Personales y garantía de los derechos digitales.
+Lozano Núñez, D. (2014). Trabajo Fin de Máster MODELOS PREDICTIVOS DEL CHURN-ABANDONO DE CLIENTES-PARA OPERADORES DE TELECOMUNICACIONES.
+Mullainathan, S., & Spiess, J. (2017). Machine learning: An applied econometric approach. Journal of Economic Perspectives, 31(2), 87–106. https://doi.org/10.1257/jep.31.2.87
+Nugroho, A. Y. (2024). Penerapan Teknik Analisis Data untuk Prediksi Penjualan Exploratory Data Analysis (EDA).
+O’RYAN BLÁZQUEZ, B. I. (2025). Desarrollo-de-un-modelo-para-predecir-interrupciones-en-la-red-de-una-empresa-de-telecomunicaciones. UNIVERSIDAD DE CHILE FACULTAD DE CIENCIAS FÍSICAS Y MATEMÁTICAS DEPARTAMENTO DE INGENIERÍA INDUSTRIAL.
+Painén-Aravena, G., Ramírez-Correa, P., Alfaro-Peréz, J., Melo Mariano, A., & Machorro-Ramos, F. (2019). Explicando el uso de Instagram en Chile: Una aplicación de la técnica de árboles de decisión. www.mendeley.com/documents/?uuid=96e1d3d5-03f4-4428-89fd-7fbf0d392f58
+Párraga Villamar, V., Rocha, C., Navarrete, H., & Lupera-Morillo, P. (2023). A Predictive Handover Approach in LTE Networks with Measurements and Decision Tree Algorithms (Case Study City of Quito). Revista Politecnica, 52(1), 15–24. https://doi.org/10.33333/rp.vol52n1.02
+Plata, G. S. (2019). América Móvil. In Global Media Giants. https://doi.org/10.4324/9781315682334-8
+Rodríguez Rodríguez, D., Rodríguez, D., De Valentin Sanz, R. C., Cruz, S., & Spain, T. (2022). Analysis of the influence of the family on aca-demic performance in Compulsory Secondary Education using decision trees. Electronic Journal of Research in Educational Psychology, 21(3), 645–666.
+(UE)  2016/  679. (2016). REGLAMENTO  (UE)  2016/  679  DEL  PARLAMENTO  EUROPEO  Y  DEL  CONSEJO  -  de 27  de  abril  de  2016  -  relativo  a  la  protección  de  las  personas  físicas  en  lo  que  respecta  al  tratamiento  de  datos  personales  y  a  la  libre  circulación  de  estos  datos  y  por  el  que  se  deroga  la  Directiva 95/  46/  CE  (Reglamento  general  de  protección  de  datos).
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+Anexo A.Privacidad y protección de datos
+El presente anexo tiene como finalidad describir las medidas adoptadas en la elaboración de este Trabajo Fin de Máster para garantizar el cumplimiento de la normativa vigente en materia de privacidad y protección de datos personales.
+El conjunto de datos utilizado en el desarrollo del estudio corresponde a información de clientes del segmento Fijo de Claro Colombia, empleada exclusivamente con fines académicos y de investigación. En ningún caso se ha tenido acceso a datos de carácter personal que permitan la identificación directa de los individuos, tales como nombres, documentos de identidad, direcciones exactas, números telefónicos u otros identificadores sensibles.
+Previamente al análisis, los datos fueron sometidos a un proceso de anonimización y depuración, asegurando que las variables empleadas representaran únicamente atributos agregados o categorizados, orientados al análisis estadístico y predictivo. Asimismo, se eliminaron o excluyeron aquellos campos que no resultaban necesarios para los objetivos del estudio o que pudieran suponer un riesgo para la confidencialidad de la información.
+El tratamiento de los datos se realizó de conformidad con los principios de minimización, confidencialidad y uso responsable de la información, limitando su utilización exclusivamente al ámbito de este trabajo académico. Los resultados obtenidos se presentan de forma agregada, evitando cualquier posibilidad de inferencia sobre clientes individuales.
+En consecuencia, el desarrollo del presente Trabajo Fin de Máster respeta los principios éticos y legales asociados a la protección de datos personales, garantizando un uso adecuado de la información y cumpliendo con los requisitos exigidos para la elaboración de trabajos académicos en este ámbito.

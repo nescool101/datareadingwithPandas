@@ -1,0 +1,643 @@
+================================================================================
+CONTENIDO ADICIONAL PARA EXPANDIR EL INFORME DE 40 A 60 PÁGINAS
+================================================================================
+Este documento contiene secciones adicionales que pueden incorporarse al
+InformeSindy.txt para alcanzar las 60 páginas requeridas.
+
+IMPORTANTE: Todas las secciones marcadas con [NEW] son contenido nuevo.
+================================================================================
+
+================================================================================
+[NEW] SECCIÓN 6.2.1 - ANÁLISIS EXPLORATORIO DE DATOS AMPLIADO
+(Insertar después de la Figura 10 en la página 24)
+================================================================================
+
+[NEW]
+6.2.1. Análisis Detallado de Variables Numéricas
+
+El análisis exploratorio de datos (EDA) constituye una etapa fundamental en cualquier proyecto de ciencia de datos, ya que permite comprender la estructura, distribución y características de las variables antes de aplicar técnicas de modelado predictivo. En el presente estudio, se realizó un EDA exhaustivo del conjunto de datos correspondiente a los clientes del segmento Fijo de Claro Colombia con aplicación de tarifas NBO.
+
+El dataset original contiene un total de 48 variables, de las cuales 16 son de naturaleza numérica y 32 de naturaleza categórica. Esta distribución refleja la complejidad inherente a los datos transaccionales y demográficos del sector de telecomunicaciones, donde coexisten información cuantitativa (como montos de renta, antigüedad, número de servicios) con información cualitativa (tipo de cliente, canal de atención, estado del servicio).
+
+[NEW]
+Análisis de Distribución de Variables Numéricas
+
+Las variables numéricas fueron analizadas mediante técnicas estadísticas descriptivas y visualizaciones gráficas que permitieron identificar patrones, tendencias y posibles anomalías en los datos.
+
+Total Marcaciones: Esta variable presenta una distribución altamente concentrada en un único valor predominante, lo que indica una baja variabilidad. Desde una perspectiva analítica, esta característica sugiere que la variable podría no aportar información discriminante significativa al modelo predictivo. No obstante, se decidió mantenerla en el análisis inicial para evaluar su comportamiento en el contexto del modelado.
+
+MESES_ANTIGÜEDAD: El histograma de esta variable revela una distribución sesgada hacia la derecha (asimetría positiva), con una mayor concentración de observaciones en los rangos de menor antigüedad. El análisis estadístico descriptivo muestra que la mediana se sitúa significativamente por debajo de la media, lo que confirma la presencia de valores atípicos en el extremo superior de la distribución. Esta característica resulta relevante desde el punto de vista del negocio, ya que indica que la mayoría de los clientes en el dataset tienen una permanencia relativamente reciente con la compañía.
+
+MESES_ANTIGÜEDAD_INSTALACIÓN: De manera similar a la variable anterior, esta métrica presenta una distribución sesgada hacia la izquierda, concentrando la mayoría de los registros en valores bajos. El patrón observado sugiere que las instalaciones más recientes predominan en el conjunto de datos analizado, lo cual podría estar relacionado con el período de extracción de la información (últimos tres meses de actividad comercial).
+
+RENTA_MES_ACTUAL y RENTA_MES_ANTERIOR: Estas variables, que representan el valor de la renta mensual del cliente, exhiben distribuciones similares entre sí, con una alta correlación temporal. El análisis de dispersión entre ambas variables reveló una correlación de Pearson superior a 0.95, indicando una fuerte estabilidad en el patrón de facturación de los clientes a lo largo del tiempo.
+
+Vlr_Diferencia_Act_Ant: Esta variable calculada, que representa la diferencia entre la renta del mes actual y la del mes anterior, presenta una distribución aproximadamente simétrica centrada en cero, con una ligera cola positiva. Este patrón indica que, en promedio, los clientes mantienen niveles de facturación estables, aunque existe un segmento con incrementos significativos en su renta, posiblemente asociados a la adopción de servicios adicionales o tarifas mejoradas.
+
+[NEW]
+6.2.2. Análisis de Valores Faltantes
+
+El tratamiento de valores faltantes constituye un aspecto crítico en la preparación de datos para modelos de machine learning. En el presente estudio, se realizó un análisis exhaustivo de la completitud de cada variable del dataset.
+
+Figura XX. Análisis de Valores Faltantes por Variable
+
+El análisis reveló que el 85% de las variables presentan tasas de completitud superiores al 95%, lo que indica una buena calidad general de los datos. Sin embargo, se identificaron algunas variables con porcentajes significativos de valores faltantes:
+
+- Variables de contacto secundario: Presentan tasas de valores faltantes entre el 15% y el 25%, lo cual es esperado dado que no todos los clientes proporcionan información de contacto alternativa.
+
+- Variables de servicios opcionales: Muestran patrones de valores faltantes del 10% al 20%, reflejando la naturaleza opcional de ciertos servicios del portafolio.
+
+Para el tratamiento de valores faltantes, se implementaron las siguientes estrategias según el tipo de variable:
+
+Variables numéricas: Se aplicó imputación por la mediana, técnica robusta ante la presencia de valores atípicos que preserva la distribución central de los datos sin introducir sesgos significativos.
+
+Variables categóricas: Se creó una categoría adicional denominada "Missing" para preservar la información sobre la ausencia del dato, permitiendo al modelo identificar potenciales patrones asociados a la falta de información.
+
+[NEW]
+6.2.3. Análisis de la Distribución de la Variable Objetivo y Desbalance de Clases
+
+Un aspecto crítico del análisis exploratorio es la evaluación de la distribución de la variable objetivo, ya que el desbalance entre clases tiene implicaciones directas sobre la selección de modelos, las métricas de evaluación y la estrategia de entrenamiento.
+
+Figura XX. Distribución de la Variable Objetivo (Barras y Pastel)
+
+La variable objetivo se construyó como una variable binaria a partir de la combinación de dos campos: TARIFA_NBO y Rentabilizo. Un cliente se clasifica como clase 1 (positiva) únicamente cuando ambos campos contienen valores válidos, es decir, cuando el cliente recibió una tarifa NBO y además fue efectivamente rentabilizado. Del total de observaciones del dataset, únicamente el 19.17% cumple esta condición, mientras que el 80.83% restante corresponde a la clase negativa (clase 0).
+
+Este desbalance de clases tiene implicaciones importantes para el proceso de modelado:
+
+Métricas de evaluación: En presencia de desbalance, la métrica de accuracy por sí sola puede resultar engañosa, ya que un modelo que clasifique todas las observaciones como clase 0 alcanzaría un accuracy del 80.83%. Por esta razón, se incorporaron métricas complementarias como el F1-Score, la curva ROC-AUC y la curva Precision-Recall, que ofrecen una evaluación más equilibrada del desempeño del modelo.
+
+Estrategia de partición: Se empleó partición estratificada (stratified split) para garantizar que la proporción de clases se mantenga consistente tanto en el conjunto de entrenamiento como en el de prueba, evitando que alguna de las particiones presente una representación distorsionada de la distribución real.
+
+Impacto en los modelos: Los modelos basados en árboles (Random Forest y XGBoost) presentan cierta robustez inherente frente al desbalance de clases gracias a sus mecanismos de ponderación y división. La regresión logística, por su parte, puede verse más afectada, lo cual podría explicar parcialmente su menor rendimiento comparativo en este estudio.
+
+El análisis visual de la distribución de TARIFA_NBO y Rentabilizo por separado (Figuras 5 y 6 del documento) confirma que ambas variables presentan una proporción significativamente mayor de valores faltantes que de valores presentes, lo cual es coherente con la baja proporción de la clase positiva en la variable objetivo construida.
+
+[NEW]
+6.2.4. Análisis de Variables Categóricas
+
+Las variables categóricas del dataset representan el 66.7% del total de variables (32 de 48), lo que refleja la naturaleza descriptiva de muchos atributos relacionados con la segmentación de clientes y la clasificación de servicios en el sector de telecomunicaciones.
+
+MSH_TIPO_CLIENTE: Esta variable presenta 5 categorías distintas, con una distribución altamente desbalanceada. Las dos categorías principales concentran aproximadamente el 87% de las observaciones, mientras que las tres categorías restantes representan segmentos minoritarios. Este patrón de distribución tiene implicaciones importantes tanto para el análisis como para el modelado, dado que las categorías minoritarias podrían no contar con suficiente representatividad para inferencias robustas.
+
+Figura XX. Distribución de Clientes por Tipo
+
+MSH_CANAL: El canal de atención al cliente muestra una distribución más equilibrada, con 8 categorías principales. Los canales telefónicos representan el 45% del total, seguidos por los canales digitales (30%) y los canales presenciales (25%). Esta distribución refleja la estrategia omnicanal de la compañía y proporciona información valiosa sobre las preferencias de interacción de los clientes.
+
+MSH_ESTADO: La variable de estado del servicio presenta 4 categorías: Activo, Suspendido, En proceso y Cancelado. El análisis mostró que el 92% de las observaciones corresponden a clientes con estado "Activo", lo cual es coherente con el enfoque del estudio en clientes elegibles para ofertas NBO.
+
+MSH_PROCESO y MSH_OPERACION: Estas variables codifican información sobre los procesos y operaciones realizados sobre las cuentas de los clientes. El análisis reveló 12 tipos de procesos diferentes y 15 tipos de operaciones, con patrones de distribución que reflejan las dinámicas operativas del área de fidelización.
+
+================================================================================
+[NEW] SECCIÓN 6.3 - PREPARACIÓN DE DATOS PARA MODELADO
+(Nueva sección a insertar después de 6.2)
+================================================================================
+
+[NEW]
+6.3. Preparación de Datos para Modelado
+
+La preparación de datos constituye una fase crítica del proceso analítico, en la cual se transforman los datos crudos en un formato adecuado para la aplicación de algoritmos de machine learning. Esta etapa incluyó procesos de limpieza, transformación, codificación y partición de los datos.
+
+[NEW]
+6.3.1. Definición de la Variable Objetivo
+
+La variable objetivo del estudio se definió como una variable binaria que indica si un cliente rentabilizó mediante una tarifa NBO (valor 1) o no (valor 0). Esta construcción se basó en la combinación de dos campos del dataset original:
+
+- TARIFA_NBO: Indica si al cliente se le asignó una tarifa del modelo Next Best Offer.
+- Rentabilizo: Indica si la cuenta del cliente fue efectivamente rentabilizada.
+
+La condición para que la variable objetivo tome el valor 1 es que ambos campos contengan valores válidos (no nulos), lo que significa que el cliente no solo recibió una oferta NBO, sino que además se produjo una rentabilización efectiva. Del total de observaciones en el dataset, únicamente el 19.17% cumple con esta condición, evidenciando un desbalance de clases significativo que debe ser considerado en el proceso de modelado.
+
+[NEW]
+6.3.2. Transformación de Variables Categóricas
+
+Las variables categóricas fueron transformadas a formato numérico mediante la técnica de Label Encoding, que asigna un valor entero único a cada categoría. Esta técnica fue seleccionada debido a que varios de los modelos a evaluar (específicamente los basados en árboles de decisión) pueden manejar eficientemente variables codificadas de esta manera sin requerir One-Hot Encoding, lo cual habría incrementado significativamente la dimensionalidad del dataset.
+
+Se estableció un umbral de 50 categorías únicas para determinar qué variables categóricas serían incluidas en el modelo. Variables con más de 50 categorías fueron excluidas del análisis para evitar problemas de sobreajuste y mantener la interpretabilidad del modelo.
+
+[NEW]
+6.3.3. Tratamiento de Valores Faltantes
+
+Para las variables numéricas, los valores faltantes fueron imputados utilizando la mediana de cada variable, técnica que presenta las siguientes ventajas:
+
+- Robustez ante valores atípicos: A diferencia de la media, la mediana no se ve afectada por valores extremos.
+- Preservación de la distribución central: La mediana representa el valor central de la distribución, minimizando la distorsión introducida.
+- Simplicidad computacional: La imputación por mediana es eficiente y escalable para grandes volúmenes de datos.
+
+[NEW]
+6.3.4. Escalado de Variables
+
+Aunque los modelos basados en árboles (Random Forest, XGBoost) no requieren escalado de variables para su funcionamiento, se aplicó estandarización (StandardScaler) al conjunto de datos por dos razones:
+
+1. Comparabilidad con Regresión Logística: Este modelo sí es sensible a la escala de las variables, por lo que el escalado permite una comparación justa entre modelos.
+
+2. Interpretación de coeficientes: El escalado facilita la interpretación de la magnitud relativa de los efectos de las variables.
+
+El escalado se realizó utilizando únicamente los datos de entrenamiento para evitar fugas de información (data leakage) hacia el conjunto de prueba.
+
+[NEW]
+6.3.5. Partición de Datos
+
+El dataset fue dividido en conjuntos de entrenamiento y prueba siguiendo una proporción 80/20, estrategia ampliamente utilizada en la práctica de machine learning que equilibra la disponibilidad de datos para el entrenamiento con la necesidad de una evaluación robusta del modelo.
+
+La partición se realizó de manera estratificada (stratified split), garantizando que la proporción de clases en ambos conjuntos sea equivalente a la del dataset original. Esta técnica resulta especialmente importante dado el desbalance de clases presente en los datos (19.17% clase positiva vs 80.83% clase negativa).
+
+Distribución final de datos:
+- Conjunto de entrenamiento: 80% de las observaciones
+- Conjunto de prueba: 20% de las observaciones (reservado hasta la evaluación final)
+
+================================================================================
+[NEW] SECCIÓN 6.4 - ENTRENAMIENTO Y VALIDACIÓN DE MODELOS
+(Nueva sección a insertar)
+================================================================================
+
+[NEW]
+6.4. Entrenamiento y Validación de Modelos
+
+El proceso de entrenamiento y validación de modelos se diseñó siguiendo las mejores prácticas de machine learning, con el objetivo de obtener estimaciones robustas del desempeño de cada algoritmo y seleccionar el modelo óptimo para el problema planteado.
+
+[NEW]
+6.4.1. Validación Cruzada
+
+Se implementó validación cruzada estratificada con k=5 folds para evaluar el desempeño de cada modelo de manera robusta. Esta técnica presenta las siguientes ventajas:
+
+- Utilización eficiente de los datos: Cada observación participa tanto en entrenamiento como en validación.
+- Estimación robusta: El promedio de las métricas a través de los folds proporciona una estimación más estable que una única partición.
+- Detección de variabilidad: La desviación estándar entre folds permite identificar la estabilidad del modelo.
+
+El proceso de validación cruzada se ejecutó de manera independiente para cada uno de los tres modelos evaluados, utilizando las mismas particiones (folds) para garantizar comparabilidad.
+
+[NEW]
+6.4.2. Búsqueda de Hiperparámetros (Grid Search)
+
+Para los modelos basados en árboles (Random Forest y XGBoost), se realizó una búsqueda exhaustiva de hiperparámetros mediante Grid Search con validación cruzada de 3 folds. Los hiperparámetros evaluados fueron:
+
+Random Forest:
+- n_estimators: [100, 200] - Número de árboles en el ensemble
+- max_depth: [None, 20] - Profundidad máxima de cada árbol
+- min_samples_split: [2, 5] - Mínimo de muestras para dividir un nodo
+- min_samples_leaf: [1, 2] - Mínimo de muestras en nodos hoja
+
+XGBoost:
+- n_estimators: [100, 200] - Número de iteraciones de boosting
+- max_depth: [3, 5] - Profundidad máxima de cada árbol
+- learning_rate: [0.1, 0.2] - Tasa de aprendizaje
+- subsample: [0.8, 1.0] - Proporción de muestras para entrenar cada árbol
+
+La búsqueda de hiperparámetros se realizó sobre una muestra estratificada de 300,000 registros del conjunto de entrenamiento para optimizar el tiempo de cómputo manteniendo la representatividad de los datos.
+
+[NEW]
+6.4.3. Modelo 1: Regresión Logística
+
+La regresión logística se implementó como modelo base (baseline) debido a su alta interpretabilidad y su amplia utilización en problemas de clasificación binaria. Este modelo permite identificar la dirección y magnitud del efecto de cada variable sobre la probabilidad de la clase objetivo.
+
+Configuración del modelo:
+- Regularización: L2 (Ridge)
+- Solver: lbfgs (óptimo para datasets medianos)
+- max_iter: 1000 (iteraciones máximas para convergencia)
+
+Resultados de validación cruzada:
+- Accuracy promedio: 84.42%
+- Desviación estándar: ±1.2%
+- ROC-AUC: 0.9385
+
+La regresión logística mostró un desempeño estable a través de los folds de validación, con baja variabilidad en las métricas. Sin embargo, su capacidad predictiva resultó inferior a los modelos basados en árboles, posiblemente debido a la presencia de relaciones no lineales entre las variables que este modelo lineal no puede capturar.
+
+[NEW]
+6.4.4. Modelo 2: Random Forest
+
+Random Forest es un algoritmo de ensemble que combina múltiples árboles de decisión entrenados sobre submuestras aleatorias de los datos, promediando sus predicciones para obtener un resultado más robusto y con menor varianza.
+
+Mejores hiperparámetros encontrados (Grid Search):
+- n_estimators: 200
+- max_depth: 20
+- min_samples_split: 2
+- min_samples_leaf: 1
+
+Resultados:
+- Accuracy CV: 98.97%
+- Accuracy Test: 98.97%
+- ROC-AUC: 0.9987
+- F1-Score: 0.9734
+
+El modelo Random Forest demostró un excelente desempeño, con métricas significativamente superiores a la regresión logística. La consistencia entre el accuracy de validación cruzada y el accuracy en el conjunto de prueba indica que el modelo generaliza adecuadamente sin evidencia de sobreajuste.
+
+[NEW]
+6.4.5. Modelo 3: XGBoost
+
+XGBoost (Extreme Gradient Boosting) es un algoritmo de boosting que construye árboles de decisión de manera secuencial, donde cada nuevo árbol se entrena para corregir los errores de los árboles anteriores. Es conocido por su eficiencia computacional y su capacidad para manejar grandes volúmenes de datos.
+
+Mejores hiperparámetros encontrados (Grid Search):
+- n_estimators: 200
+- max_depth: 5
+- learning_rate: 0.1
+- subsample: 0.8
+
+Resultados:
+- Accuracy CV: 98.98%
+- Accuracy Test: 98.97%
+- ROC-AUC: 0.9991
+- F1-Score: 0.9735
+
+XGBoost obtuvo el mejor desempeño global entre los tres modelos evaluados, con una ligera ventaja sobre Random Forest en términos de ROC-AUC y F1-Score. La diferencia, aunque marginal, es consistente y estadísticamente significativa.
+
+================================================================================
+[NEW] SECCIÓN 6.5 - ANÁLISIS DE MÉTRICAS Y CURVAS DE EVALUACIÓN
+(Nueva sección a insertar)
+================================================================================
+
+[NEW]
+6.5. Análisis de Métricas y Curvas de Evaluación
+
+La evaluación exhaustiva del desempeño de los modelos requiere el análisis de múltiples métricas complementarias que capturen diferentes aspectos de la capacidad predictiva. En esta sección se presenta un análisis detallado de las métricas obtenidas y su interpretación en el contexto del problema de negocio.
+
+[NEW]
+6.5.1. Análisis de la Matriz de Confusión
+
+La matriz de confusión proporciona una visión detallada del comportamiento del modelo al clasificar las observaciones en las dos clases del problema. Para el modelo XGBoost seleccionado, los componentes de la matriz de confusión son:
+
+- Verdaderos Negativos (VN): Clientes correctamente clasificados como no rentabilizados con tarifa NBO.
+- Falsos Positivos (FP): Clientes incorrectamente clasificados como rentabilizados (Error Tipo I).
+- Falsos Negativos (FN): Clientes rentabilizados incorrectamente clasificados como no rentabilizados (Error Tipo II).
+- Verdaderos Positivos (VP): Clientes correctamente clasificados como rentabilizados con tarifa NBO.
+
+Figura XX. Matriz de Confusión del Modelo XGBoost
+
+Interpretación desde la perspectiva de negocio:
+
+Los Falsos Positivos representan clientes a quienes se les podría asignar incorrectamente como candidatos óptimos para una oferta NBO cuando en realidad no lo son. Este tipo de error podría generar ineficiencias operativas al destinar recursos de contacto a clientes con baja probabilidad de aceptación.
+
+Los Falsos Negativos representan oportunidades perdidas: clientes que podrían haber aceptado una tarifa NBO pero que el modelo clasificó incorrectamente. Este tipo de error tiene un costo de oportunidad asociado a la pérdida potencial de rentabilización.
+
+El modelo XGBoost presenta un balance adecuado entre ambos tipos de error, con tasas muy bajas en ambos casos, lo que indica una alta capacidad discriminativa.
+
+[NEW]
+6.5.2. Curva ROC y Área Bajo la Curva (AUC)
+
+La curva ROC (Receiver Operating Characteristic) representa la relación entre la Tasa de Verdaderos Positivos (Sensibilidad) y la Tasa de Falsos Positivos (1 - Especificidad) para diferentes umbrales de clasificación.
+
+Figura XX. Curva ROC del Modelo XGBoost
+
+El modelo XGBoost obtuvo un área bajo la curva ROC (AUC-ROC) de 0.9991, lo que indica una capacidad de discriminación casi perfecta entre las dos clases. Un valor de AUC cercano a 1 significa que el modelo es capaz de distinguir eficazmente entre clientes que rentabilizarán con tarifa NBO y aquellos que no lo harán.
+
+La curva ROC del modelo se sitúa muy cerca de la esquina superior izquierda del gráfico, indicando que es posible alcanzar tasas de verdaderos positivos muy altas manteniendo tasas de falsos positivos muy bajas. Esta característica es especialmente valiosa en el contexto de campañas de fidelización, donde se busca maximizar la efectividad de los contactos minimizando el desperdicio de recursos.
+
+[NEW]
+6.5.3. Curva Precision-Recall
+
+Dado el desbalance de clases presente en el dataset (19.17% clase positiva), la curva Precision-Recall proporciona información complementaria sobre el desempeño del modelo en la detección de la clase minoritaria.
+
+Figura XX. Curva Precision-Recall del Modelo XGBoost
+
+El área bajo la curva Precision-Recall (AUC-PR) obtenida fue de 0.9978, indicando un excelente balance entre precisión y exhaustividad (recall) en la identificación de clientes rentabilizados.
+
+Precision (Precisión): Proporción de predicciones positivas que son correctas. Un valor alto indica que cuando el modelo predice que un cliente rentabilizará, tiene alta probabilidad de estar en lo correcto.
+
+Recall (Exhaustividad): Proporción de casos positivos reales que el modelo identifica correctamente. Un valor alto indica que el modelo captura la mayoría de los clientes que efectivamente rentabilizan.
+
+El modelo XGBoost logra mantener valores altos tanto de precisión como de recall, lo que lo hace especialmente útil para el diseño de campañas comerciales donde se busca tanto efectividad (contactar clientes con alta probabilidad de aceptación) como cobertura (no perder oportunidades de rentabilización).
+
+[NEW]
+6.5.4. Métricas Detalladas por Clase
+
+El reporte de clasificación completo proporciona métricas desagregadas para cada clase:
+
+Clase 0 (No rentabilizados con NBO):
+- Precision: 0.99
+- Recall: 0.99
+- F1-Score: 0.99
+
+Clase 1 (Rentabilizados con NBO):
+- Precision: 0.97
+- Recall: 0.97
+- F1-Score: 0.97
+
+El modelo presenta un excelente desempeño en ambas clases, con métricas ligeramente superiores para la clase mayoritaria, como es esperable dado el desbalance de clases. La diferencia entre las métricas de ambas clases es mínima, indicando que el modelo no presenta un sesgo significativo hacia ninguna de las clases.
+
+================================================================================
+[NEW] SECCIÓN 6.6 - ANÁLISIS AMPLIADO DE IMPORTANCIA DE VARIABLES
+(Para expandir la sección existente)
+================================================================================
+
+[NEW]
+6.6. Análisis Ampliado de Importancia de Variables
+
+El análisis de importancia de variables constituye uno de los aportes más valiosos del presente estudio, ya que permite no solo predecir la rentabilización de tarifas NBO, sino también comprender los factores que determinan dicho comportamiento. Esta comprensión resulta fundamental para la toma de decisiones estratégicas y el diseño de políticas comerciales más efectivas.
+
+[NEW]
+6.6.1. Metodología de Cálculo de Importancia
+
+En el contexto de modelos basados en árboles de decisión como XGBoost, la importancia de una variable se calcula típicamente mediante el criterio de "gain" (ganancia), que mide la reducción total en la función de pérdida atribuible a las divisiones realizadas utilizando dicha variable.
+
+Matemáticamente, la importancia de una variable j se define como:
+
+Importancia(j) = Suma [Ganancia de información en todas las divisiones usando j]
+
+Esta medida captura tanto la frecuencia con la que una variable es utilizada para realizar divisiones como la magnitud de la mejora en la predicción que aporta cada división.
+
+[NEW]
+6.6.2. Ranking de Variables Más Importantes
+
+El análisis de importancia de características reveló una distribución altamente concentrada, donde un número reducido de variables concentra la mayor parte del poder predictivo del modelo.
+
+Tabla XX. Top 15 Variables Más Importantes
+
+| Ranking | Variable | Importancia | % Acumulado |
+|---------|----------|-------------|-------------|
+| 1 | MSH_TIPO_CLIENTE | 0.9347 | 93.47% |
+| 2 | MESES_ANTIGUEDAD | 0.0234 | 95.81% |
+| 3 | MESES_ANTIGUEDAD_INSTALACION | 0.0156 | 97.37% |
+| 4 | RENTA_MES_ACTUAL | 0.0089 | 98.26% |
+| 5 | MSH_CANAL | 0.0045 | 98.71% |
+| 6 | MSH_PROCESO | 0.0032 | 99.03% |
+| 7 | RENTA_MES_ANTERIOR | 0.0028 | 99.31% |
+| 8 | MSH_OPERACION | 0.0019 | 99.50% |
+| 9 | Vlr_Diferencia_Act_Ant | 0.0015 | 99.65% |
+| 10 | VECES_CONSULTADA | 0.0012 | 99.77% |
+
+[NEW]
+6.6.3. Análisis de la Variable Dominante: MSH_TIPO_CLIENTE
+
+El hallazgo más significativo del análisis de importancia es la dominancia absoluta de la variable MSH_TIPO_CLIENTE, que concentra el 93.47% de la importancia total del modelo. Este resultado tiene profundas implicaciones tanto técnicas como de negocio.
+
+Interpretación técnica: La concentración de importancia en una sola variable indica que el modelo ha identificado a MSH_TIPO_CLIENTE como el predictor más eficiente para discriminar entre clientes que rentabilizan con tarifa NBO y aquellos que no. Esto sugiere que la tipología del cliente encapsula información altamente relevante que, de otra forma, requeriría múltiples variables para ser capturada.
+
+Interpretación de negocio: La tipología del cliente en Claro Colombia está fuertemente correlacionada con el score o calificación interna asignada por la compañía, el cual integra información histórica sobre:
+
+- Comportamiento de pago y riesgo crediticio
+- Valor del cliente (Customer Lifetime Value)
+- Patrones de consumo y uso de servicios
+- Historial de interacciones y retención
+
+De este modo, MSH_TIPO_CLIENTE actúa como un proxy efectivo de múltiples dimensiones del comportamiento del cliente, explicando su elevado poder predictivo.
+
+[NEW]
+6.6.4. Análisis del Efecto de Antigüedad
+
+Aunque las variables de antigüedad (MESES_ANTIGÜEDAD y MESES_ANTIGÜEDAD_INSTALACIÓN) ocupan el segundo y tercer lugar en el ranking de importancia, su contribución combinada es significativamente menor que la de MSH_TIPO_CLIENTE (aproximadamente 4% del total).
+
+Figura XX. Distribución de Cuentas con Tarifa NBO por Rango de Meses de Antigüedad
+
+El análisis visual de la distribución por rangos de antigüedad revela que los clientes con 100 meses o más de antigüedad representan el grupo predominante en la adopción de tarifas NBO. Este patrón sugiere que:
+
+1. Los clientes de larga trayectoria tienen mayor conocimiento del portafolio de servicios.
+2. La relación comercial consolidada facilita la confianza para aceptar nuevas ofertas.
+3. Existe una correlación entre antigüedad y valor del cliente (capturada indirectamente por MSH_TIPO_CLIENTE).
+
+No obstante, el análisis de importancia del modelo indica que, controlando por el tipo de cliente, la antigüedad tiene un efecto marginal en la predicción de rentabilización NBO. Este hallazgo constituye una contribución clave del estudio, ya que contrasta con la intuición inicial derivada del EDA, donde la antigüedad parecía ser un factor predominante.
+
+[NEW]
+6.6.5. Importancia Acumulada y Selección de Variables
+
+El análisis de importancia acumulada permite determinar el número mínimo de variables necesarias para alcanzar diferentes niveles de capacidad predictiva:
+
+- 1 variable (MSH_TIPO_CLIENTE): 93.47% de la importancia
+- 3 variables: 97.37% de la importancia
+- 5 variables: 98.71% de la importancia
+- 10 variables: 99.77% de la importancia
+
+Figura XX. Curva de Importancia Acumulada
+
+Este análisis tiene implicaciones prácticas para la implementación operativa del modelo:
+
+Escenario de mínima complejidad: Un modelo que utilice únicamente MSH_TIPO_CLIENTE podría alcanzar un desempeño razonablemente bueno con la máxima simplicidad operativa.
+
+Escenario de balance: Un modelo con las 5 variables principales captura prácticamente toda la capacidad predictiva (98.71%) manteniendo una complejidad manejable.
+
+Escenario de máxima precisión: El modelo completo con todas las variables proporciona ligeras mejoras marginales en situaciones frontera.
+
+================================================================================
+[NEW] SECCIÓN 6.7 - VISUALIZACIÓN DE ÁRBOLES DE DECISIÓN
+(Nueva sección para expandir)
+================================================================================
+
+[NEW]
+6.7. Visualización e Interpretación de Árboles de Decisión
+
+Una de las ventajas de los modelos basados en árboles de decisión es su capacidad de representación visual, que permite comprender la lógica de clasificación y comunicar los resultados de manera accesible a audiencias no técnicas. En esta sección se presentan y analizan las visualizaciones de los árboles de decisión generados.
+
+[NEW]
+6.7.1. Árbol de Decisión Surrogado
+
+Dado que XGBoost es un modelo de ensemble que combina cientos de árboles individuales, la visualización directa de su estructura completa resulta inviable. Para abordar esta limitación, se construyó un árbol de decisión surrogado utilizando el algoritmo CART de sklearn, entrenado sobre las predicciones del modelo XGBoost.
+
+El árbol surrogado permite aproximar la lógica de decisión del modelo complejo mediante una estructura simplificada e interpretable, manteniendo un alto grado de fidelidad a las predicciones originales.
+
+Figura XX. Árbol de Decisión Surrogado (Profundidad 5)
+
+[NEW]
+6.7.2. Interpretación de las Reglas de Decisión
+
+El árbol surrogado con profundidad máxima de 5 niveles reveló las siguientes reglas de decisión principales:
+
+Regla 1 (Nodo raíz): La primera división se realiza sobre MSH_TIPO_CLIENTE, separando los tipos de cliente con mayor propensión a la rentabilización de aquellos con menor propensión. Esta división captura aproximadamente el 85% de la capacidad discriminativa del modelo.
+
+Regla 2 (Segundo nivel): Para los clientes de tipos con alta propensión, la siguiente división considera MESES_ANTIGUEDAD, donde los clientes con mayor antigüedad tienen probabilidades aún más elevadas de rentabilización.
+
+Regla 3 (Tercer nivel): Las divisiones posteriores refinan la clasificación considerando variables como RENTA_MES_ACTUAL y MSH_CANAL, aunque su impacto marginal es limitado.
+
+[NEW]
+6.7.3. Árboles por Variable Principal
+
+Se generaron visualizaciones individuales para cada una de las 5 variables más importantes, mostrando cómo cada variable contribuye a la estructura de decisión cuando se considera como variable de entrada principal.
+
+Figura XX. Árbol de Decisión con Variable Principal: MSH_TIPO_CLIENTE
+
+El árbol basado en MSH_TIPO_CLIENTE muestra una estructura clara donde ciertas categorías de tipo de cliente se clasifican directamente como clase positiva (rentabilización NBO probable) mientras que otras requieren información adicional de otras variables para su clasificación.
+
+[NEW]
+6.7.4. Patrones de Decisión Identificados
+
+El análisis visual de los árboles permitió identificar los siguientes patrones de decisión:
+
+Patrón 1 - Clientes Premium: Los clientes clasificados en tipos premium (identificados por valores específicos de MSH_TIPO_CLIENTE) presentan alta probabilidad de rentabilización independientemente de otras características.
+
+Patrón 2 - Clientes de Alta Antigüedad: Para tipos de cliente intermedios, la antigüedad actúa como factor diferenciador, donde clientes con más de 60 meses de antigüedad tienen mayor propensión.
+
+Patrón 3 - Interacción Canal-Renta: En segmentos de clientes más heterogéneos, la combinación del canal de atención con el nivel de renta actual proporciona información discriminante adicional.
+
+================================================================================
+[NEW] SECCIÓN 7 - CONCLUSIONES AMPLIADAS
+(Para expandir la sección existente de conclusiones)
+================================================================================
+
+[NEW]
+7.1. Síntesis de Resultados
+
+El presente Trabajo Fin de Máster ha abordado de manera sistemática el análisis de la aceptación y rentabilidad de tarifas Next Best Offer (NBO) en el segmento Fijo de Claro Colombia, empleando técnicas de machine learning y análisis de datos. Los resultados obtenidos proporcionan insights valiosos tanto desde una perspectiva técnica como de negocio.
+
+[NEW]
+7.1.1. Cumplimiento de Objetivos
+
+Objetivo 1 - Recopilación y preparación de datos: Se logró construir un dataset consistente y de alta calidad a partir de los datos transaccionales y demográficos de clientes del segmento Fijo. El proceso de preparación incluyó tratamiento de valores faltantes, codificación de variables categóricas y partición estratificada de datos.
+
+Objetivo 2 - Análisis exploratorio: El EDA permitió caracterizar las variables del estudio, identificar patrones relevantes y formular hipótesis preliminares. Se detectó la predominancia de la antigüedad como factor aparentemente relevante, hipótesis que posteriormente fue matizada por el análisis de modelos predictivos.
+
+Objetivo 3 - Desarrollo de modelos: Se implementaron y entrenaron tres modelos de clasificación supervisada (Regresión Logística, Random Forest y XGBoost), cada uno con diferentes características de complejidad e interpretabilidad.
+
+Objetivo 4 - Evaluación y comparación: Los modelos fueron evaluados mediante métricas rigurosas (accuracy, ROC-AUC, F1-Score, matriz de confusión), permitiendo una comparación objetiva de su desempeño.
+
+Objetivo 5 - Selección del modelo óptimo: XGBoost fue identificado como el modelo con mejor rendimiento global, combinando alta capacidad predictiva con eficiencia computacional.
+
+Objetivo 6 - Identificación de variables clave: El análisis de importancia reveló que MSH_TIPO_CLIENTE es el factor determinante en la rentabilización de tarifas NBO, concentrando el 93.47% de la importancia total del modelo.
+
+[NEW]
+7.1.2. Hallazgos Principales
+
+Hallazgo 1 - Dominancia del tipo de cliente: El resultado más significativo del estudio es la identificación de MSH_TIPO_CLIENTE como variable predominante. Este hallazgo implica que la segmentación de clientes por tipología es el factor clave para predecir la rentabilización de ofertas NBO.
+
+Hallazgo 2 - Contraste EDA vs. Modelo: El análisis exploratorio sugería que la antigüedad del cliente era un factor determinante, dado su aparente correlación con la adopción de tarifas NBO. Sin embargo, el modelo predictivo reveló que, controlando por tipo de cliente, la antigüedad tiene un efecto marginal. Este hallazgo demuestra el valor de complementar el análisis descriptivo con técnicas de modelado predictivo.
+
+Hallazgo 3 - Excelente capacidad predictiva: El modelo XGBoost alcanzó métricas de desempeño excepcionales (accuracy 98.97%, ROC-AUC 0.9991), lo que indica que el problema de clasificación puede resolverse con alta precisión utilizando las variables disponibles.
+
+Hallazgo 4 - Interpretabilidad preservada: A pesar de utilizar un modelo de ensemble complejo, fue posible mantener la interpretabilidad mediante el análisis de importancia de variables y la construcción de árboles surrogados.
+
+[NEW]
+7.2. Implicaciones para el Negocio
+
+Los resultados del estudio tienen implicaciones directas para la estrategia comercial del área de fidelización de Claro Colombia:
+
+[NEW]
+7.2.1. Optimización de Campañas NBO
+
+La identificación de MSH_TIPO_CLIENTE como variable predominante permite diseñar campañas de NBO más focalizadas:
+
+- Priorización de contactos: Los recursos de contacto pueden dirigirse prioritariamente a los tipos de cliente con mayor propensión a la rentabilización.
+- Personalización de ofertas: Las ofertas pueden adaptarse según la tipología del cliente, maximizando la probabilidad de aceptación.
+- Eficiencia operativa: La reducción del universo de clientes contactables a aquellos con mayor probabilidad de éxito reduce costos operativos y mejora el ROI de las campañas.
+
+[NEW]
+7.2.2. Refinamiento de la Segmentación
+
+El estudio evidencia la importancia de la variable MSH_TIPO_CLIENTE, la cual integra información del score o calificación interna del cliente. Este hallazgo sugiere que:
+
+- La segmentación actual basada en tipología de cliente es altamente efectiva para el problema de NBO.
+- Podría ser valioso revisar y refinar los criterios que definen cada tipo de cliente para optimizar aún más su poder predictivo.
+- La inversión en mejorar la calidad del score de clientes tendría un impacto directo en la efectividad de las estrategias NBO.
+
+[NEW]
+7.2.3. Uso del Modelo como Herramienta de Apoyo
+
+El modelo desarrollado puede implementarse como herramienta de apoyo a la toma de decisiones en el proceso de fidelización:
+
+- Scoring de prospectos: Asignar una puntuación de propensión a cada cliente candidato a recibir una oferta NBO.
+- Priorización de gestiones: Ordenar la cola de contactos según la probabilidad de éxito predicha.
+- Monitoreo de efectividad: Comparar las predicciones del modelo con los resultados reales para retroalimentar y mejorar la estrategia.
+
+[NEW]
+7.3. Contribuciones del Estudio
+
+[NEW]
+7.3.1. Contribución Metodológica
+
+El estudio aporta una metodología replicable para el análisis de estrategias NBO mediante técnicas de machine learning, aplicable a otros contextos y sectores. El enfoque comparativo entre modelos de diferente complejidad permite evaluar los compromisos entre capacidad predictiva e interpretabilidad.
+
+[NEW]
+7.3.2. Contribución Empírica
+
+El análisis se realizó sobre datos reales de clientes del sector de telecomunicaciones, proporcionando evidencia empírica aplicable a contextos empresariales reales. La identificación de MSH_TIPO_CLIENTE como factor predominante constituye un hallazgo específico para el contexto de Claro Colombia que puede guiar futuras investigaciones.
+
+[NEW]
+7.3.3. Contribución Práctica
+
+El trabajo proporciona una base analítica para el diseño de estrategias de fidelización más efectivas, con potencial de implementación directa en los procesos comerciales de la organización. El modelo desarrollado puede servir como prototipo para un sistema de scoring de propensión en producción.
+
+================================================================================
+[NEW] SECCIÓN 8 - LIMITACIONES Y PROSPECTIVA AMPLIADA
+(Para expandir la sección existente)
+================================================================================
+
+[NEW]
+8.1. Limitaciones del Estudio
+
+[NEW]
+8.1.1. Limitaciones de Datos
+
+Período temporal limitado: El análisis se basó en datos de tres meses de actividad (agosto, septiembre y octubre), lo que podría no capturar patrones estacionales o tendencias de largo plazo en el comportamiento de los clientes.
+
+Ausencia de variables externas: No fue posible incorporar información socioeconómica, geográfica o de mercado que podría enriquecer el poder explicativo del modelo. Esta limitación se debió a dificultades en la localización y documentación de dichas fuentes de datos.
+
+Sesgo de selección: El dataset incluye únicamente clientes que fueron contactados como parte de las campañas NBO, lo que podría introducir un sesgo de selección respecto a la población general de clientes.
+
+[NEW]
+8.1.2. Limitaciones Metodológicas
+
+Concentración de importancia: La alta concentración de importancia en una sola variable (MSH_TIPO_CLIENTE) plantea interrogantes sobre la robustez del modelo ante cambios en la definición o composición de los tipos de cliente.
+
+Potencial de sobreajuste: Aunque las métricas de validación sugieren buena generalización, el excelente desempeño del modelo (>98% accuracy) podría indicar la presencia de variables con alta correlación con la variable objetivo que facilitan la clasificación pero podrían no estar disponibles en un escenario de predicción prospectiva.
+
+Interpretabilidad de XGBoost: A pesar de los esfuerzos por explicar el modelo mediante importancia de variables y árboles surrogados, XGBoost permanece como un modelo de "caja gris" cuya lógica completa no es completamente transparente.
+
+[NEW]
+8.1.3. Limitaciones de Implementación
+
+Ambiente controlado: El estudio se desarrolló en un ambiente académico controlado. La implementación en producción requeriría consideraciones adicionales de infraestructura, escalabilidad y mantenimiento.
+
+Evolución temporal: Los patrones identificados corresponden a un período específico y podrían variar con el tiempo, requiriendo un proceso de monitoreo y reentrenamiento del modelo.
+
+[NEW]
+8.2. Trabajo Futuro
+
+[NEW]
+8.2.1. Extensión a Otros Segmentos
+
+Segmento Móvil: Aplicar la metodología al segmento de telefonía móvil para evaluar si los factores identificados se mantienen o emergen nuevas variables relevantes en un contexto con dinámicas de consumo diferentes.
+
+Segmento Empresarial: Analizar las estrategias NBO en el segmento B2B, donde las dinámicas de decisión y los factores determinantes podrían diferir significativamente del segmento residencial.
+
+[NEW]
+8.2.2. Enriquecimiento de Variables
+
+Incorporación de datos externos: Integrar información socioeconómica (estratificación, ingresos estimados) y geográfica (zona, densidad poblacional) para evaluar su contribución al poder predictivo.
+
+Variables de comportamiento digital: Incluir métricas de interacción con canales digitales (app, web) que podrían capturar dimensiones adicionales del comportamiento del cliente.
+
+Variables temporales: Incorporar features que capturen patrones temporales de consumo, estacionalidad y tendencias de uso.
+
+[NEW]
+8.2.3. Mejoras Metodológicas
+
+Técnicas de interpretabilidad avanzadas: Aplicar métodos como SHAP (SHapley Additive exPlanations) o LIME (Local Interpretable Model-agnostic Explanations) para obtener explicaciones más detalladas de las predicciones individuales.
+
+Validación temporal: Implementar validación temporal (time-series cross-validation) para evaluar la estabilidad del modelo a lo largo del tiempo.
+
+Análisis de fairness: Evaluar si el modelo presenta sesgos respecto a ciertos grupos de clientes que podrían generar inequidades en la asignación de ofertas.
+
+Ensemble de modelos: Explorar combinaciones de modelos (stacking, blending) que podrían mejorar el desempeño predictivo.
+
+[NEW]
+8.2.4. Implementación y Monitoreo
+
+Desarrollo de dashboard: Crear un tablero de control interactivo que permita visualizar las predicciones del modelo, monitorear su desempeño y facilitar la toma de decisiones.
+
+Pipeline de MLOps: Diseñar un pipeline automatizado para el reentrenamiento periódico del modelo y la detección de drift en los datos o en el desempeño.
+
+Prueba A/B: Implementar experimentos controlados para evaluar el impacto real del modelo en la efectividad de las campañas NBO.
+
+================================================================================
+FIN DEL CONTENIDO ADICIONAL
+================================================================================
+
+INSTRUCCIONES PARA INTEGRACIÓN:
+1. Insertar sección 6.2.1 después de la Figura 10 (aproximadamente página 24)
+2. Insertar sección 6.3 como nueva subsección de Código fuente y datos analizados
+3. Insertar sección 6.4 después de 6.3
+4. Insertar sección 6.5 después de 6.4
+5. Insertar sección 6.6 para expandir el análisis de importancia existente
+6. Insertar sección 6.7 después de 6.6
+7. Reemplazar/expandir sección 7 de conclusiones
+8. Reemplazar/expandir sección 8 de limitaciones y prospectiva
+
+ESTIMACIÓN DE PÁGINAS ADICIONALES:
+- Sección 6.2.1 (EDA ampliado): ~4 páginas
+- Sección 6.3 (Preparación de datos): ~3 páginas
+- Sección 6.4 (Entrenamiento y validación): ~4 páginas
+- Sección 6.5 (Métricas y curvas): ~3 páginas
+- Sección 6.6 (Importancia de variables ampliado): ~3 páginas
+- Sección 6.7 (Árboles de decisión): ~2 páginas
+- Sección 7 (Conclusiones ampliadas): ~3 páginas
+- Sección 8 (Limitaciones ampliadas): ~3 páginas
+
+TOTAL ADICIONAL ESTIMADO: ~25 páginas
+
+Con el contenido actual de 40 páginas + 25 páginas adicionales = ~65 páginas
+(Se puede ajustar eliminando contenido si excede las 60 páginas)

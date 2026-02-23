@@ -1,104 +1,141 @@
-# Análisis de Datos - Machine Learning
+# Analisis de Datos NBO - Machine Learning
 
-Este proyecto contiene herramientas para analizar datos con modelos de machine learning.
+Este proyecto contiene el analisis de datos y modelado predictivo para el sistema NBO (Next Best Offer). Incluye deteccion y correccion de fuga de datos (data leakage), validacion critica de modelos, y arquitectura tecnica de despliegue.
 
 ## Archivos del Proyecto
 
+- `analisis_datos.ipynb` - Notebook principal con analisis corregido (22 pasos)
 - `convertir_excel_a_csv.py` - Script para convertir archivos Excel a CSV
-- `analisis_datos.py` - Script completo de análisis (ejecutable desde línea de comandos)
-- `analisis_datos.ipynb` - Jupyter notebook con análisis paso a paso
 - `requirements.txt` - Dependencias del proyecto
+- `RESPUESTA_COMENTARIOS_TUTORA.md` - Documentacion de correcciones aplicadas
+- `CONCLUSIONES_ANALISIS.md` - Conclusiones del analisis
 
-## Instalación
+## Requisitos Previos
 
-1. Instalar las dependencias:
+### 1. Python 3.7+
+
+### 2. Instalar dependencias
+
 ```bash
 pip install -r requirements.txt
 ```
 
-## Uso
+Las dependencias incluyen: pandas, numpy, matplotlib, seaborn, scikit-learn, xgboost, scipy, openpyxl, jupyter, ipykernel.
 
-### Paso 1: Convertir Excel a CSV
+### 3. Dataset (obligatorio)
 
-Si tienes un archivo Excel que necesitas convertir:
+Colocar el archivo CSV en la raiz del proyecto:
 
-```bash
-python convertir_excel_a_csv.py archivo.xlsx
+```
+Total_Mes_Act_Datos completos CORREGIDO.csv
 ```
 
-O especificando el archivo de salida y la hoja:
+Este archivo **no esta incluido en el repositorio** (esta en `.gitignore` por su tamano). Debe obtenerse del equipo de datos o de la fuente original.
 
-```bash
-python convertir_excel_a_csv.py archivo.xlsx archivo.csv "Hoja1"
-```
+El archivo debe contener las siguientes columnas (entre otras):
+- `TARIFA_NBO`, `Rentabilizo` (componentes del target)
+- `Msh Cuenta`, `MSH_CEDULA`, `MSH_LOGIN_ID` (identificadores)
+- `SIN TARIFA`, `MSH_TIPO_CLIENTE`, `MOVIMIENTO_RENTA` (variables analizadas por fuga)
+- `Msh Fecha (copia)` (usada para validacion temporal)
 
-### Paso 2: Análisis con Script Python
+## Como Ejecutar el Notebook Corregido
 
-Ejecutar el script completo:
+### Opcion A: Desde Jupyter (recomendado)
 
-```bash
-python analisis_datos.py
-```
-
-Este script:
-- Carga el CSV
-- Convierte a JSON (muestra de 100,000 registros)
-- Realiza conteo por campo "cuenta"
-- Genera análisis EDA
-- Filtra datos por "tarifa NBO" y "Rentabilizacion"
-- Entrena modelos (Regresión Logística, Random Forest, XGBoost)
-- Realiza validación cruzada
-- Ejecuta Grid Search
-- Compara modelos y determina el mejor
-
-### Paso 3: Análisis con Jupyter Notebook (Recomendado)
-
-Para ver el progreso paso a paso:
-
-1. Iniciar Jupyter:
 ```bash
 jupyter notebook
 ```
 
-2. Abrir `analisis_datos.ipynb`
+1. Abrir `analisis_datos.ipynb`
+2. Ejecutar **Kernel -> Restart & Run All**
+3. Esperar a que todas las celdas se ejecuten secuencialmente
 
-3. Ejecutar las celdas en orden para ver el progreso del análisis
+### Opcion B: Desde linea de comandos
+
+```bash
+jupyter nbconvert --to notebook --execute analisis_datos.ipynb --output analisis_datos_ejecutado.ipynb
+```
+
+### Opcion C: Desde VS Code
+
+1. Abrir `analisis_datos.ipynb` en VS Code
+2. Seleccionar el kernel de Python con las dependencias instaladas
+3. Ejecutar todas las celdas (boton "Run All" o `Ctrl+Shift+Enter`)
+
+## Estructura del Notebook (22 Pasos)
+
+| Paso | Descripcion |
+|---|---|
+| 1 | Importacion de librerias y creacion de carpetas |
+| 2 | Carga de datos desde CSV |
+| 3 | Conversion a JSON y conteo por cuenta |
+| 4 | Analisis Exploratorio de Datos (EDA) |
+| **4.1** | **EDA con decisiones concretas por variable** |
+| 5 | Identificacion y filtrado de datos |
+| **5.1** | **Documentacion de variables eliminadas** |
+| **6** | **Preparacion de datos (corregido: sin fuga de datos)** |
+| 7 | Entrenamiento de modelos |
+| 8 | Grid Search con muestreo estratificado |
+| 9 | Resumen de resultados de Grid Search |
+| 10 | Comparacion y conclusion |
+| 11 | Analisis de importancia de variables |
+| 12 | Visualizacion de arboles de decision |
+| 13 | Visualizaciones EDA individuales |
+| **14** | **Comparacion de modelos (corregido: sin fuga de datos)** |
+| **14.1** | **Analisis de ablacion (4 escenarios)** |
+| **14.2** | **Validacion temporal** |
+| **14.3** | **Comparacion antes/despues de correcciones** |
+| **15** | **Arquitectura tecnica del sistema NBO** |
+| **16** | **Esquema conceptual de despliegue** |
+| **17** | **Conclusiones finales, limitaciones y recomendaciones** |
+
+Los pasos en **negrita** son nuevos o modificados en la correccion del 23 de febrero de 2026.
 
 ## Archivos de Salida
 
-Todos los resultados se guardan en el directorio `resultados/`:
+Todos los resultados se guardan en `resultados/`:
 
-- `datos_completos.json` - Conversión del CSV a JSON
+### Resultados generales
+- `datos_completos.json` - Conversion del CSV a JSON
 - `conteo_por_cuenta.csv` - Conteo por campo cuenta
-- `conteo_por_cuenta.json` - Conteo en formato JSON
-- `conteo_por_cuenta.txt` - Resumen del conteo
-- `resumen_eda.txt` - Resumen del análisis exploratorio
-- `eda_visualizaciones.png` - Visualizaciones del EDA
-- `resultados_modelos.csv` - Resultados de los modelos
-- `reporte_logisticregression.txt` - Reporte de Regresión Logística
-- `reporte_randomforest.txt` - Reporte de Random Forest
-- `reporte_xgboost.txt` - Reporte de XGBoost
-- `validacion_cruzada.csv` - Resultados de validación cruzada
-- `validacion_cruzada.txt` - Resumen de validación cruzada
-- `grid_search_resultados.txt` - Resultados del Grid Search
-- `grid_search_parametros.json` - Parámetros óptimos en JSON
-- `resumen_final.txt` - Resumen final con la comparación de modelos
+- `importancia_caracteristicas.csv` - Importancia de features
+- `mapeo_features_nombres_reales.json` - Mapeo Feature_X a nombres reales
 
-## Requisitos
+### Resultados Paso 14 (`resultados/paso14/`)
+- `comparacion_modelos_metricas.csv` - Metricas de los 3 modelos
+- `conclusion_paso14.json` - Conclusion con mejor modelo
+- `resultados_validacion_cruzada_paso14.json` - Resultados CV
 
-- Python 3.7+
-- pandas
-- numpy
-- matplotlib
-- seaborn
-- scikit-learn
-- xgboost
-- openpyxl (para Excel)
-- jupyter (para notebook)
+### Graficas de correcciones (`resultados/graficas23Febrero/`)
+| Archivo | Descripcion |
+|---|---|
+| `fuga_sin_tarifa_vs_target.png` | Evidencia de fuga en SIN TARIFA |
+| `sospecha_tipo_cliente_vs_target.png` | Analisis de MSH_TIPO_CLIENTE |
+| `correlacion_variables_target.png` | Correlacion de variables con target |
+| `decision_variables_tabla.png` | Tabla de decisiones por variable |
+| `ablacion_comparativa_metricas.png` | Metricas por escenario de ablacion |
+| `ablacion_importancia_features_por_escenario.png` | Top features por escenario |
+| `validacion_temporal_vs_aleatoria.png` | Temporal vs aleatorio |
+| `validacion_temporal_metricas.png` | Curvas ROC temporales |
+| `comparacion_antes_despues_metricas.png` | Metricas antes/despues |
+| `comparacion_antes_despues_curvas_roc.png` | Curvas ROC antes/despues |
+| `esquema_despliegue.png` | Timeline de despliegue |
+| `documentacion_variables_eliminadas.json` | Justificacion de exclusiones |
+| `resultados_ablacion.json` | Resultados numericos de ablacion |
+
+## Verificacion Post-Ejecucion
+
+Despues de ejecutar el notebook, verificar:
+
+1. La carpeta `resultados/graficas23Febrero/` contiene las 11+ graficas
+2. Las metricas del modelo corregido son **menores** que las originales (esperado: AUC ~0.75-0.92 en vez de 0.999)
+3. Los 4 escenarios de ablacion (A, B, C, D) se ejecutan sin error
+4. La validacion temporal se ejecuta o documenta su limitacion si la fecha no es parseable
+5. Los Pasos 15-17 muestran contenido completo de arquitectura y despliegue
 
 ## Notas
 
-- El script detecta automáticamente las columnas "tarifa NBO" y "Rentabilizacion"
-- Si el archivo CSV es muy grande (>200MB), la conversión a JSON se limita a 100,000 registros
-- El Grid Search puede tardar varios minutos dependiendo del tamaño de los datos
-
+- El notebook detecta automaticamente las columnas `TARIFA_NBO` y `Rentabilizo`
+- Si el CSV es muy grande (>200MB), la conversion a JSON se limita a 100,000 registros
+- El Grid Search y la ablacion pueden tardar varios minutos dependiendo del tamano de los datos
+- Si `Msh Fecha (copia)` no puede parsearse como fecha, el Paso 14.2 documenta la limitacion en lugar de fallar

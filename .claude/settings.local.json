@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python3:*)",
+      "Bash(/Users/nescao/Library/Python/3.9/bin/jupyter nbconvert:*)",
+      "Bash(tail:*)"
+    ]
+  }
+}

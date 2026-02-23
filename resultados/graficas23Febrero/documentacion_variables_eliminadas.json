@@ -1,0 +1,48 @@
+{
+  "identificadores": {
+    "columnas": [
+      "Msh Cuenta",
+      "MSH_CEDULA",
+      "MSH_LOGIN_ID"
+    ],
+    "razon": "Identificadores unicos sin poder predictivo. Su inclusion causaria memorizacion de casos individuales (overfitting extremo).",
+    "accion": "ELIMINAR"
+  },
+  "fuga_directa": {
+    "columnas": [
+      "SIN TARIFA"
+    ],
+    "razon": "Codifica directamente si existe TARIFA_NBO, que es componente del target. Su correlacion con el target es artificialment alta.",
+    "accion": "ELIMINAR"
+  },
+  "target": {
+    "columnas": [
+      "TARIFA_NBO",
+      "Rentabilizo"
+    ],
+    "razon": "Componentes de la variable objetivo. No pueden usarse como features.",
+    "accion": "ELIMINAR (son el target)"
+  },
+  "fecha": {
+    "columnas": [
+      "Msh Fecha (copia)"
+    ],
+    "razon": "Columna de fecha reservada para validacion temporal. No se usa como feature pero si para dividir train/test temporal.",
+    "accion": "RESERVAR para validacion temporal"
+  },
+  "duplicadas": {
+    "columnas": [
+      "Msh Hora (copia)"
+    ],
+    "razon": "Duplicado de la columna Msh Hora. Informacion redundante.",
+    "accion": "ELIMINAR"
+  },
+  "sospechosas_para_ablacion": {
+    "columnas": [
+      "MSH_TIPO_CLIENTE",
+      "MOVIMIENTO_RENTA"
+    ],
+    "razon": "MSH_TIPO_CLIENTE mostro 93.47% de importancia en modelos previos (posible proxy del target). MOVIMIENTO_RENTA podria contener informacion post-resultado (fuga temporal). Se evaluaran en analisis de ablacion (Paso 14.1).",
+    "accion": "EVALUAR por ablacion"
+  }
+}

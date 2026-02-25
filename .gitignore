@@ -206,11 +206,10 @@ marimo/_static/
 marimo/_lsp/
 __marimo__/
 
-# Resultados (archivos pesados específicos)
-resultados/datos_preparados_7_1.pkl
-resultados/datos_completos.json
-resultados/conteo_por_cuenta.json
-# Archivo CSV de datos originales
+# Archivos pesados originales (con sufijo 2)
+resultados/datos_preparados_7_1_2.pkl
+resultados/datos_completos2.json
+resultados/conteo_por_cuenta2.json
+Total_Mes_Act_Datos completos CORREGIDO2.csv
 Total_Mes_Act_Datos completos.csv
-Total_Mes_Act_Datos completos CORREGIDO.csv
 Total_Mes_Act_Datos completosOLD.csv
